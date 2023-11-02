@@ -32,7 +32,7 @@ int initialize_window()
         SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
-        0
+        SDL_WINDOW_FULLSCREEN
     ); //(const char *title, int x, int y, int w, int h, Uint32 flags)
 
 
@@ -51,7 +51,7 @@ int initialize_renderer()
     renderer = SDL_CreateRenderer(
         window, //Window Name
         -1, //Driver to utilize
-        (SDL_RENDERER_ACCELERATED, SDL_RENDERER_PRESENTVSYNC) //Flags            
+        0 //Flags            
     );
 
     //Renderer Initialization Verification
