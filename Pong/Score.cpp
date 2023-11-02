@@ -1,4 +1,7 @@
 #include "Score.h"
+#include "MenuTest.h"
+#include <string>
+#include <stdio.h>
 #include <SDL_ttf.h> 
 #include <SDL_image.h>
 
@@ -9,33 +12,12 @@ int intLeftScore = 0; //Puntaje Inicial Izquierdo
 int intRightScore = 0; // Puntaje Inicial Derecho
 
 //Almacenamiento de Strings
-TTF_Font* font;
-std::string stringScoreLeft;
-std::string stringScoreRight;
-const char* scoreCharLeft = stringScoreLeft.c_str();
-const char* scoreCharRight = stringScoreRight.c_str();
+std::string stringScoreLeft, stringScoreRight;
+const char *scoreCharLeft = stringScoreLeft.c_str();
+const char *scoreCharRight = stringScoreRight.c_str();
 score scoreLeft, scoreRight;
-SDL_Surface* surfaceScoreLeft;
-SDL_Texture* textureScoreLeft;
-SDL_Surface* surfaceScoreRight;
-SDL_Texture* textureScoreRight;
-
-
-//////////////////
-//Fuente de texto. 
-//////////////////
-
-
-void FontInitialitation()
-{
-    font = TTF_OpenFont("8bitOperatorPlus-Regular.ttf", 64);
-    if (font == nullptr)
-    {
-        fprintf(stderr, "Font Error\n");
-        fprintf(stderr, TTF_GetError());
-    }
-}
- 
+SDL_Surface *surfaceScoreLeft, *surfaceScoreRight;
+SDL_Texture *textureScoreLeft, *textureScoreRight;
 
 ///////////////////
 //Puntaje Izquierdo

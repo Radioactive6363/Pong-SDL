@@ -3,12 +3,12 @@
 #include <stdio.h>
 
 extern SDL_Texture* textureBall;
-extern int ballWidth;
-extern int ballHeight;
-extern int ballRangeRandomInterval_X;
-extern int ballRangeRandomInterval_Y;
-extern int initialSpeed_X;
-extern int initialSpeed_Y;
+extern int ballWidth, 
+           ballHeight, 
+           ballRangeRandomInterval_X, 
+           ballRangeRandomInterval_Y,
+           initialSpeed_X,
+           initialSpeed_Y;
 
 struct ball
 {

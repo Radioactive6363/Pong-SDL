@@ -3,23 +3,16 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
-extern int scoreWidth;
-extern int scoreHeight;
-extern int scoreSeparation;
-extern int intLeftScore;
-extern int intRightScore;
-extern std::string stringScoreLeft;
-extern std::string stringScoreRight;
-extern const char* scoreCharLeft;
-extern const char* scoreCharRight;
+extern int scoreWidth, scoreHeight, scoreSeparation, intLeftScore, intRightScore;
+extern std::string stringScoreLeft, stringScoreRight;
+extern const char *scoreCharLeft, * scoreCharRight;
 
-extern TTF_Font* font;
 struct score
 {
-    float x;
-    float y;
-    float width;
-    float height;
+    int x;
+    int y;
+    int width;
+    int height;
 };
 extern score scoreLeft, scoreRight;
 extern SDL_Surface* surfaceScoreLeft;
@@ -27,10 +20,8 @@ extern SDL_Texture* textureScoreLeft;
 extern SDL_Surface* surfaceScoreRight;
 extern SDL_Texture* textureScoreRight;
 
-void FontInitialitation();
-
 void setupScoreLeft(int, int);
-void updateScoreLeft(SDL_Renderer* renderer);
+void updateScoreLeft(SDL_Renderer*);
 
 void setupScoreRight(int, int);
-void updateScoreRight(SDL_Renderer* renderer);
+void updateScoreRight(SDL_Renderer*);

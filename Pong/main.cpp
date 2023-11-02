@@ -9,7 +9,7 @@
 #include "Ball.h"
 #include "Score.h"
 #include "Paletas.h"
-
+#include "MenuTest.h"
 
 int initialize_SDL()
 {
@@ -32,7 +32,7 @@ int initialize_window()
         SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
-        SDL_WINDOW_FULLSCREEN
+        0
     ); //(const char *title, int x, int y, int w, int h, Uint32 flags)
 
 
@@ -51,7 +51,7 @@ int initialize_renderer()
     renderer = SDL_CreateRenderer(
         window, //Window Name
         -1, //Driver to utilize
-        0 //Flags            
+        (SDL_RENDERER_ACCELERATED,SDL_RENDERER_PRESENTVSYNC) //Flags            
     );
 
     //Renderer Initialization Verification
@@ -151,6 +151,7 @@ void setup()
     //Ubicacion Inicial de Objetos
     //////////////////////////////
 
+    setupPrincipalMenu(WINDOW_WIDTH, WINDOW_HEIGHT);
     setupScoreLeft(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
     setupScoreRight(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Derecho
     setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
@@ -172,6 +173,12 @@ void update()
     delta_time = (SDL_GetTicks() - lastFrameTime) / 1000.0f;
     lastFrameTime = SDL_GetTicks();
 
+    ////////////////////////
+    ///Update Menu Principal
+    ////////////////////////
+
+    updatePrincipalMenu(renderer);
+
     ///////////////////////
     //Movimiento de Pelota
     ///////////////////////
@@ -186,41 +193,58 @@ void update()
     collisionLeftPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
     collisionRightPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
 
-    ////////////////////////
+    /////////////////////////
     ///Acumuladores Puntajes
-    ////////////////////////
-
+    /////////////////////////
     updateScoreLeft(renderer); //Puntaje Izquierdo
     updateScoreRight(renderer); //Puntaje Derecho
 }
 
 void render()
 {
-    SDL_Rect ball = { //Image made with SDL_RenderCopy()
-    (int)ballimg.x,
-    (int)ballimg.y,
-    (int)ballimg.width,
-    (int)ballimg.height
+    SDL_Rect rectStart = { //Image made with SDL_RenderCopy()
+        (int)txtStart.x,
+        (int)txtStart.y,
+        (int)txtStart.width,
+        (int)txtStart.height
     };
-    SDL_Rect paddle_Left = {
+    SDL_Rect rectOptions = { //Image made with SDL_RenderCopy()
+        (int)txtOptions.x,
+        (int)txtOptions.y,
+        (int)txtOptions.width,
+        (int)txtOptions.height
+    };
+    SDL_Rect rectQuit = { //Image made with SDL_RenderCopy()
+        (int)txtQuit.x,
+        (int)txtQuit.y,
+        (int)txtQuit.width,
+        (int)txtQuit.height
+    };
+    SDL_Rect rectBall = { //Image made with SDL_RenderCopy()
+        (int)ballimg.x,
+        (int)ballimg.y,
+        (int)ballimg.width,
+        (int)ballimg.height
+    };
+    SDL_Rect rectPaddle_Left = {
         (int)paddleLeft.x,
         (int)paddleLeft.y,
         (int)paddleLeft.width,
         (int)paddleLeft.height
     };
-    SDL_Rect paddle_Right = {
+    SDL_Rect rectPaddle_Right = {
         (int)paddleRight.x,
         (int)paddleRight.y,
         (int)paddleRight.width,
         (int)paddleRight.height
     };
-    SDL_Rect score_Left = {
+    SDL_Rect rectScore_Left = {
         (int)scoreLeft.x,
         (int)scoreLeft.y,
         (int)scoreLeft.width,
         (int)scoreLeft.height,
     };
-    SDL_Rect score_Right = {
+    SDL_Rect rectScore_Right = {
         (int)scoreRight.x,
         (int)scoreRight.y,
         (int)scoreRight.width,
@@ -228,11 +252,14 @@ void render()
     };
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, textureBall, nullptr, &ball);
-    SDL_RenderCopy(renderer, texturePaddle, nullptr, &paddle_Left);
-    SDL_RenderCopy(renderer, texturePaddle, nullptr, &paddle_Right);
-    SDL_RenderCopy(renderer, textureScoreLeft, nullptr, &score_Left);
-    SDL_RenderCopy(renderer, textureScoreRight, nullptr, &score_Right);
+    SDL_RenderCopy(renderer, textureStart, nullptr, &rectStart);
+    SDL_RenderCopy(renderer, textureOptions, nullptr, &rectOptions);
+    SDL_RenderCopy(renderer, textureQuit, nullptr, &rectQuit);
+    SDL_RenderCopy(renderer, textureBall, nullptr, &rectBall);
+    SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Left);
+    SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Right);
+    SDL_RenderCopy(renderer, textureScoreLeft, nullptr, &rectScore_Left);
+    SDL_RenderCopy(renderer, textureScoreRight, nullptr, &rectScore_Right);
 
     //Buffers
     SDL_RenderPresent(renderer);
