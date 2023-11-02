@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <SDL_ttf.h> 
 #include <SDL_image.h>
+#include "Ball.h"
+#include "Score.h"
+#include "Paletas.h"
 
 int txtWidth = 300; //Ancho de texto.
 int txtHeight = 300;//Alto de texto.
@@ -88,9 +91,21 @@ void updateQuit(SDL_Renderer* renderer)
     SDL_FreeSurface(surfaceQuit);
 }
 
-///////////////////////
-//Inicializadores Menu
-///////////////////////
+
+//////////////////////////
+///Inicializador Texturas
+//////////////////////////
+
+void initializeTextures(SDL_Renderer *renderer)
+{
+    FontInitialitation(); // Fuente
+    textureInitialitationBall(renderer); //Pelota
+    textureInitialitationPalette(renderer); //Paleta
+}
+
+//////////////////////////
+// Menu
+//////////////////////////
 
 void setupPrincipalMenu(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
@@ -104,3 +119,26 @@ void updatePrincipalMenu(SDL_Renderer* renderer)
     updateOptions(renderer);
     updateQuit(renderer);
 }
+
+//////////////////////////
+//Juego
+//////////////////////////
+
+void setupJuegoNormal(int WINDOW_WIDTH, int WINDOW_HEIGHT)
+{
+    setupScoreLeft(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
+    setupScoreRight(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Derecho
+    setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
+    setupLeftPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Izquierda
+    setupRightPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Derecha
+}
+void updateJuegoNormal(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
+{
+    ballMovement(delta_time); //Movimiento Pelota
+    ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT); //Colisiones Pelota
+    collisionLeftPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
+    collisionRightPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
+    updateScoreLeft(renderer); //Puntaje Izquierdo
+    updateScoreRight(renderer); //Puntaje Derecho
+}
+

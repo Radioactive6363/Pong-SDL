@@ -32,7 +32,7 @@ int initialize_window()
         SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
-        0
+        SDL_WINDOW_FULLSCREEN
     ); //(const char *title, int x, int y, int w, int h, Uint32 flags)
 
 
@@ -51,7 +51,7 @@ int initialize_renderer()
     renderer = SDL_CreateRenderer(
         window, //Window Name
         -1, //Driver to utilize
-        (SDL_RENDERER_ACCELERATED,SDL_RENDERER_PRESENTVSYNC) //Flags            
+        0 //Flags            
     );
 
     //Renderer Initialization Verification
@@ -142,21 +142,9 @@ void setup()
     //////////////////////////
     // Inicializacion Texturas
     //////////////////////////
-
-    FontInitialitation(); // Fuente
-    textureInitialitationBall(renderer); //Pelota
-    textureInitialitationPalette(renderer); //Paleta
-
-    //////////////////////////////
-    //Ubicacion Inicial de Objetos
-    //////////////////////////////
-
+    initializeTextures(renderer);
     setupPrincipalMenu(WINDOW_WIDTH, WINDOW_HEIGHT);
-    setupScoreLeft(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
-    setupScoreRight(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Derecho
-    setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
-    setupLeftPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Izquierda
-    setupRightPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Derecha
+    setupJuegoNormal(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
 
 void update()
@@ -176,51 +164,31 @@ void update()
     ////////////////////////
     ///Update Menu Principal
     ////////////////////////
-
     updatePrincipalMenu(renderer);
-
-    ///////////////////////
-    //Movimiento de Pelota
-    ///////////////////////
-
-    ballMovement(delta_time);
-    
-    /////////////
-    //Colisiones
-    /////////////
-
-    ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT); //Colisiones Pelota
-    collisionLeftPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
-    collisionRightPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
-
-    /////////////////////////
-    ///Acumuladores Puntajes
-    /////////////////////////
-    updateScoreLeft(renderer); //Puntaje Izquierdo
-    updateScoreRight(renderer); //Puntaje Derecho
+    updateJuegoNormal(renderer, WINDOW_WIDTH, WINDOW_HEIGHT, delta_time);
 }
 
 void render()
 {
-    SDL_Rect rectStart = { //Image made with SDL_RenderCopy()
+    SDL_Rect rectStart = {
         (int)txtStart.x,
         (int)txtStart.y,
         (int)txtStart.width,
         (int)txtStart.height
     };
-    SDL_Rect rectOptions = { //Image made with SDL_RenderCopy()
+    SDL_Rect rectOptions = {
         (int)txtOptions.x,
         (int)txtOptions.y,
         (int)txtOptions.width,
         (int)txtOptions.height
     };
-    SDL_Rect rectQuit = { //Image made with SDL_RenderCopy()
+    SDL_Rect rectQuit = {
         (int)txtQuit.x,
         (int)txtQuit.y,
         (int)txtQuit.width,
         (int)txtQuit.height
     };
-    SDL_Rect rectBall = { //Image made with SDL_RenderCopy()
+    SDL_Rect rectBall = {
         (int)ballimg.x,
         (int)ballimg.y,
         (int)ballimg.width,

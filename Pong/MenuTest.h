@@ -16,7 +16,8 @@ extern texts txtStart, txtOptions, txtQuit;
 extern SDL_Surface *surfaceStart, *surfaceOptions, *surfaceQuit;
 extern SDL_Texture *textureStart, *textureOptions, *textureQuit;
 
-void FontInitialitation();
-
+void initializeTextures(SDL_Renderer*);
+void setupJuegoNormal(int, int);
+void updateJuegoNormal(SDL_Renderer*, int, int, float);
 void setupPrincipalMenu(int, int);
 void updatePrincipalMenu(SDL_Renderer*);
