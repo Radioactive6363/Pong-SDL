@@ -1,0 +1,40 @@
+"https://www.geeksforgeeks.org/sdl-library-in-c-c-with-examples/"
+
+Funcionamiento de libreria de SDL con ejemplos.
+
+
+"SDL_Window* window = NULL"
+
+SDL uses a lot of pointers because it's a C library and doesn't have clever features like constructors, exceptions and references.
+
+In C++ we often use references to avoid creating a copy when passing an object to a function. C doesn't have references so it uses pointers instead for the same reason. Another reason could be to allow optional arguments. The second and forth argument of SDL_BlitSurface is optional. If you don't want to pass a SDL_Rect you simply pass a null pointer.
+
+https://www.youtube.com/watch?v=2ybLD6_2gKM
+
+https://cplusplus.com/doc/tutorial/pointers/
+
+Funciona identico al copiado por valor o por referencia.
+
+int * "nombre" = direccion de memoria
+int nombre  = *"nombreconvalor" (int, char, string que posee esa direccion de memoria)
+
+
+"SDL_CreateWindow(); //(const char *title, int x, int y, int w, int h, Uint32 flags)"
+
+title: Titulo de la ventana
+X, Y = Posicion en eje X e Y en la que se quiere colocar la ventana. Se puede utilizar SDL_WINDOWSPOS_CENTER,
+siendo una constante ya declarada por la libreria SDL.
+W= Ancho de la ventana
+H= Altura de la ventana
+Uint32= Representa un entero de 32 bits sin signo. Son los flags, estan ya declaradas en la libreria de SDL_WINDOW
+
+
+//FOTOGRAMAS POR SEGUNDO
+
+				500	     0           16.6666
+while (!SDL_TICKS_PASSED(SDL_GetTicks(), lastFrame + FRAME_TARGET_TIME));
+
+Si SDL_TICKS_PASSED es falso, while funciona. Si A supera B, es verdadero y viceversa.
+
+
+
