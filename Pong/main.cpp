@@ -103,14 +103,6 @@ void process_input()
             {
                 game_is_running = FALSE;
             }
-            if (keyboardState[SDL_SCANCODE_W])
-            {
-                paddleLeft.y -= paddleSpeed * delta_time;
-            }
-            if (keyboardState[SDL_SCANCODE_S])
-            {
-                paddleLeft.y += paddleSpeed * delta_time;
-            }
         }
     }
 
