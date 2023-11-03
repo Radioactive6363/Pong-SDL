@@ -30,3 +30,4 @@ int lastFrameTime = 0;//Factor de diferencia entre ultimo fotograma.
 int game_is_running = TRUE; //TRUE= Funciona. FALSE= ERROR, Finaliza Gameloop.
 SDL_Window* window = NULL;//Generacion de ventana
 SDL_Renderer* renderer = NULL;//Generacion de render
+

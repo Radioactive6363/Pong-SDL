@@ -91,7 +91,6 @@ void updateQuit(SDL_Renderer* renderer)
     SDL_FreeSurface(surfaceQuit);
 }
 
-
 //////////////////////////
 ///Inicializador Texturas
 //////////////////////////
@@ -119,12 +118,42 @@ void updatePrincipalMenu(SDL_Renderer* renderer)
     updateOptions(renderer);
     updateQuit(renderer);
 }
+void renderPrincipalMenu(SDL_Renderer* renderer)
+{
+    SDL_Rect rectStart = {
+        (int)txtStart.x,
+        (int)txtStart.y,
+        (int)txtStart.width,
+        (int)txtStart.height
+    };
+    SDL_Rect rectOptions = {
+        (int)txtOptions.x,
+        (int)txtOptions.y,
+        (int)txtOptions.width,
+        (int)txtOptions.height
+    };
+    SDL_Rect rectQuit = {
+        (int)txtQuit.x,
+        (int)txtQuit.y,
+        (int)txtQuit.width,
+        (int)txtQuit.height
+    };
+    SDL_RenderCopy(renderer, textureStart, nullptr, &rectStart);
+    SDL_RenderCopy(renderer, textureOptions, nullptr, &rectOptions);
+    SDL_RenderCopy(renderer, textureQuit, nullptr, &rectQuit);
+}
+void destroyTexturesPrincipalMenu()
+{
+    SDL_DestroyTexture(textureStart);
+    SDL_DestroyTexture(textureOptions);
+    SDL_DestroyTexture(textureQuit);
+}
 
 //////////////////////////
 //Juego
 //////////////////////////
 
-void setupJuegoNormal(int WINDOW_WIDTH, int WINDOW_HEIGHT)
+void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
     setupScoreLeft(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
     setupScoreRight(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Derecho
@@ -132,7 +161,7 @@ void setupJuegoNormal(int WINDOW_WIDTH, int WINDOW_HEIGHT)
     setupLeftPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Izquierda
     setupRightPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Derecha
 }
-void updateJuegoNormal(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
+void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
 {
     ballMovement(delta_time); //Movimiento Pelota
     ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT); //Colisiones Pelota
@@ -141,4 +170,48 @@ void updateJuegoNormal(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIG
     updateScoreLeft(renderer); //Puntaje Izquierdo
     updateScoreRight(renderer); //Puntaje Derecho
 }
-
+void renderNormalGame(SDL_Renderer* renderer)
+{
+    SDL_Rect rectBall = {
+     (int)ballimg.x,
+     (int)ballimg.y,
+     (int)ballimg.width,
+     (int)ballimg.height
+    };
+    SDL_Rect rectPaddle_Left = {
+        (int)paddleLeft.x,
+        (int)paddleLeft.y,
+        (int)paddleLeft.width,
+        (int)paddleLeft.height
+    };
+    SDL_Rect rectPaddle_Right = {
+        (int)paddleRight.x,
+        (int)paddleRight.y,
+        (int)paddleRight.width,
+        (int)paddleRight.height
+    };
+    SDL_Rect rectScore_Left = {
+        (int)scoreLeft.x,
+        (int)scoreLeft.y,
+        (int)scoreLeft.width,
+        (int)scoreLeft.height,
+    };
+    SDL_Rect rectScore_Right = {
+        (int)scoreRight.x,
+        (int)scoreRight.y,
+        (int)scoreRight.width,
+        (int)scoreRight.height,
+    };
+    SDL_RenderCopy(renderer, textureBall, nullptr, &rectBall);
+    SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Left);
+    SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Right);
+    SDL_RenderCopy(renderer, textureScoreLeft, nullptr, &rectScore_Left);
+    SDL_RenderCopy(renderer, textureScoreRight, nullptr, &rectScore_Right);
+}
+void destroyTexturesNormalGame()
+{
+    SDL_DestroyTexture(textureBall);
+    SDL_DestroyTexture(texturePaddle);
+    SDL_DestroyTexture(textureScoreLeft);
+    SDL_DestroyTexture(textureScoreRight);
+}

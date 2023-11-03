@@ -17,7 +17,13 @@ extern SDL_Surface *surfaceStart, *surfaceOptions, *surfaceQuit;
 extern SDL_Texture *textureStart, *textureOptions, *textureQuit;
 
 void initializeTextures(SDL_Renderer*);
-void setupJuegoNormal(int, int);
-void updateJuegoNormal(SDL_Renderer*, int, int, float);
+
 void setupPrincipalMenu(int, int);
 void updatePrincipalMenu(SDL_Renderer*);
+void renderPrincipalMenu(SDL_Renderer*);
+void destroyTexturesPrincipalMenu();
+
+void setupNormalGame(int, int);
+void updateNormalGame(SDL_Renderer*, int, int, float);
+void renderNormalGame(SDL_Renderer*);
+void destroyTexturesNormalGame();

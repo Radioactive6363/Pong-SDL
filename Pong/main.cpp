@@ -6,8 +6,6 @@
 #include <string> //Funcion String
 #include <time.h> //Time
 #include "main.h"
-#include "Ball.h"
-#include "Score.h"
 #include "Paletas.h"
 #include "MenuTest.h"
 
@@ -139,12 +137,14 @@ void process_input()
 
 void setup()
 {
-    //////////////////////////
-    // Inicializacion Texturas
-    //////////////////////////
+    ///////////////////
+    ///Inicializadores
+    ///////////////////
+
     initializeTextures(renderer);
     setupPrincipalMenu(WINDOW_WIDTH, WINDOW_HEIGHT);
-    setupJuegoNormal(WINDOW_WIDTH, WINDOW_HEIGHT);
+    setupNormalGame(WINDOW_WIDTH, WINDOW_HEIGHT);
+
 }
 
 void update()
@@ -164,80 +164,43 @@ void update()
     ////////////////////////
     ///Update Menu Principal
     ////////////////////////
+
     updatePrincipalMenu(renderer);
-    updateJuegoNormal(renderer, WINDOW_WIDTH, WINDOW_HEIGHT, delta_time);
+    updateNormalGame(renderer, WINDOW_WIDTH, WINDOW_HEIGHT, delta_time);
+
 }
 
 void render()
 {
-    SDL_Rect rectStart = {
-        (int)txtStart.x,
-        (int)txtStart.y,
-        (int)txtStart.width,
-        (int)txtStart.height
-    };
-    SDL_Rect rectOptions = {
-        (int)txtOptions.x,
-        (int)txtOptions.y,
-        (int)txtOptions.width,
-        (int)txtOptions.height
-    };
-    SDL_Rect rectQuit = {
-        (int)txtQuit.x,
-        (int)txtQuit.y,
-        (int)txtQuit.width,
-        (int)txtQuit.height
-    };
-    SDL_Rect rectBall = {
-        (int)ballimg.x,
-        (int)ballimg.y,
-        (int)ballimg.width,
-        (int)ballimg.height
-    };
-    SDL_Rect rectPaddle_Left = {
-        (int)paddleLeft.x,
-        (int)paddleLeft.y,
-        (int)paddleLeft.width,
-        (int)paddleLeft.height
-    };
-    SDL_Rect rectPaddle_Right = {
-        (int)paddleRight.x,
-        (int)paddleRight.y,
-        (int)paddleRight.width,
-        (int)paddleRight.height
-    };
-    SDL_Rect rectScore_Left = {
-        (int)scoreLeft.x,
-        (int)scoreLeft.y,
-        (int)scoreLeft.width,
-        (int)scoreLeft.height,
-    };
-    SDL_Rect rectScore_Right = {
-        (int)scoreRight.x,
-        (int)scoreRight.y,
-        (int)scoreRight.width,
-        (int)scoreRight.height,
-    };
+    //////////////////////
+    ///Dibujado de Fondo
+    //////////////////////
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, textureStart, nullptr, &rectStart);
-    SDL_RenderCopy(renderer, textureOptions, nullptr, &rectOptions);
-    SDL_RenderCopy(renderer, textureQuit, nullptr, &rectQuit);
-    SDL_RenderCopy(renderer, textureBall, nullptr, &rectBall);
-    SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Left);
-    SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Right);
-    SDL_RenderCopy(renderer, textureScoreLeft, nullptr, &rectScore_Left);
-    SDL_RenderCopy(renderer, textureScoreRight, nullptr, &rectScore_Right);
 
-    //Buffers
+    ////////////////////////////////
+    ///Dibujado de Textos y Objetos
+    ////////////////////////////////
+
+    renderPrincipalMenu(renderer);
+    renderNormalGame(renderer);
+
+    ///////////
+    ///Buffers
+    ///////////
+
     SDL_RenderPresent(renderer);
 }
 
 void destroy_window()
 {
+    /////////////////////////
+    ///Liberacion de Memoria
+    /////////////////////////
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    SDL_DestroyTexture(textureBall);
+    destroyTexturesPrincipalMenu();
+    destroyTexturesNormalGame();
     SDL_Quit();
 }
 
