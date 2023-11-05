@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <SDL_ttf.h> 
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 extern TTF_Font* font;
 struct texts

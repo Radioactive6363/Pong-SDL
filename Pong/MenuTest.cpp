@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <SDL_ttf.h> 
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 #include "Ball.h"
 #include "Score.h"
 #include "Paletas.h"
 
+//Variables Modificables
 int txtWidth = 300; //Ancho de texto.
 int txtHeight = 300;//Alto de texto.
 int txtSeparation = 250; //Separacion de textos.
@@ -18,7 +20,6 @@ SDL_Texture *textureStart, *textureOptions, *textureQuit;
 
 //////////////////
 //Fuente de texto.
-//////////////////
 
 void FontInitialitation()
 {
@@ -32,7 +33,6 @@ void FontInitialitation()
 
 ////////////////////
 //Funciones de Menu
-////////////////////
 
 void setupStart(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
@@ -90,6 +90,7 @@ void updateQuit(SDL_Renderer* renderer)
     textureQuit = SDL_CreateTextureFromSurface(renderer, surfaceQuit);
     SDL_FreeSurface(surfaceQuit);
 }
+
 
 //////////////////////////
 ///Inicializador Texturas
@@ -157,6 +158,7 @@ void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
     setupScoreLeft(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
     setupScoreRight(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Derecho
+    setupTimerGame(WINDOW_WIDTH, WINDOW_HEIGHT);
     setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
     setupLeftPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Izquierda
     setupRightPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Derecha
@@ -167,6 +169,7 @@ void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGH
     ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT); //Colisiones Pelota
     collisionLeftPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
     collisionRightPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
+    updateTimerGame(renderer);
     updateScoreLeft(renderer); //Puntaje Izquierdo
     updateScoreRight(renderer); //Puntaje Derecho
 }
@@ -190,6 +193,12 @@ void renderNormalGame(SDL_Renderer* renderer)
         (int)paddleRight.width,
         (int)paddleRight.height
     };
+    SDL_Rect rectTimer_Game = {
+        (int)timer.x,
+        (int)timer.y,
+        (int)timer.width,
+        (int)timer.height
+    };
     SDL_Rect rectScore_Left = {
         (int)scoreLeft.x,
         (int)scoreLeft.y,
@@ -205,6 +214,7 @@ void renderNormalGame(SDL_Renderer* renderer)
     SDL_RenderCopy(renderer, textureBall, nullptr, &rectBall);
     SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Left);
     SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Right);
+    SDL_RenderCopy(renderer, textureTimerGame, nullptr, &rectTimer_Game);
     SDL_RenderCopy(renderer, textureScoreLeft, nullptr, &rectScore_Left);
     SDL_RenderCopy(renderer, textureScoreRight, nullptr, &rectScore_Right);
 }

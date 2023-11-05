@@ -3,6 +3,7 @@
 #include <SDL.h> //Libreria SDL
 #include <SDL_image.h> //SDL Imagenes
 #include <SDL_ttf.h> //SDL Textos
+#include <SDL_mixer.h> //SDL Audio
 #include <string> //Funcion String
 #include <time.h> //Time
 #include "main.h"
@@ -78,9 +79,20 @@ int initialize_SDLTtf()
 {
     if (TTF_Init())
     {
-        //SDL_image Initialization Verification.
+        //SDL_text Initialization Verification.
         fprintf(stderr, "TTF_Init Error Initialization\n");
         fprintf(stderr, TTF_GetError());
+        return FALSE;
+    }
+    return TRUE;
+}
+
+int initialize_SDLMixer()
+{
+    //SDL_Mixer Initialization Verification.
+    if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096)) //Frecuencia, Formato de Audio, Canales, Tamaño de las muestras de audio.
+    {
+        fprintf(stderr, "SDL_Mixer Error Initialization\n");
         return FALSE;
     }
     return TRUE;
@@ -102,6 +114,10 @@ void process_input()
             if (inputEvent.key.keysym.sym == SDLK_ESCAPE)
             {
                 game_is_running = FALSE;
+            }
+            if (inputEvent.key.keysym.sym == SDLK_SPACE)
+            {
+                gameStart = true;
             }
         }
     }
@@ -157,9 +173,15 @@ void update()
     ///Update Menu Principal
     ////////////////////////
 
-    updatePrincipalMenu(renderer);
-    updateNormalGame(renderer, WINDOW_WIDTH, WINDOW_HEIGHT, delta_time);
-
+    
+    if(gameStart == false)
+    {
+        updatePrincipalMenu(renderer);
+    }
+    else
+    {
+        updateNormalGame(renderer, WINDOW_WIDTH, WINDOW_HEIGHT, delta_time);
+    }
 }
 
 void render()
@@ -167,6 +189,7 @@ void render()
     //////////////////////
     ///Dibujado de Fondo
     //////////////////////
+
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
@@ -174,8 +197,15 @@ void render()
     ///Dibujado de Textos y Objetos
     ////////////////////////////////
 
-    renderPrincipalMenu(renderer);
-    renderNormalGame(renderer);
+    
+    if(gameStart == false)
+    {
+        renderPrincipalMenu(renderer);
+    }
+    else
+    {
+        renderNormalGame(renderer);
+    }
 
     ///////////
     ///Buffers
@@ -199,7 +229,7 @@ void destroy_window()
 int main(int argc, char* argv[])
 {
     srand(time(NULL));
-    game_is_running = initialize_SDL() & initialize_window() & initialize_renderer() & initialize_SDLImg() & initialize_SDLTtf();
+    game_is_running = initialize_SDL() & initialize_window() & initialize_renderer() & initialize_SDLImg() & initialize_SDLTtf() & initialize_SDLMixer();
 
     setup();
 
