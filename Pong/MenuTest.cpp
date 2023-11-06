@@ -12,6 +12,11 @@
 int txtWidth = 300; //Ancho de texto.
 int txtHeight = 300;//Alto de texto.
 int txtSeparation = 250; //Separacion de textos.
+Mix_Music* music = NULL;
+Mix_Chunk* paddleLeftSFX = NULL;
+Mix_Chunk* paddleRightSFX = NULL;
+Mix_Chunk* bordersSFX = NULL;
+Mix_Chunk* scoreSFX = NULL;
 
 TTF_Font *font;
 texts txtStart, txtOptions, txtQuit;
@@ -101,6 +106,30 @@ void initializeTextures(SDL_Renderer *renderer)
     FontInitialitation(); // Fuente
     textureInitialitationBall(renderer); //Pelota
     textureInitialitationPalette(renderer); //Paleta
+}
+
+////////////////////////////////
+///Audio y Musica
+////////////////////////////////
+
+void initializeMusic()
+{
+    music = Mix_LoadMUS("ServantsOfScourage.wav");
+}
+void initializeSFX()
+{
+    paddleLeftSFX = Mix_LoadWAV("PaddleLeft.wav");
+    paddleRightSFX = Mix_LoadWAV("PaddleRight.wav");
+    bordersSFX = Mix_LoadWAV("Borders.wav");
+    scoreSFX = Mix_LoadWAV("ScoreSFX.wav");
+}
+void destroyMusicSFX()
+{
+    Mix_FreeMusic(music);
+    Mix_FreeChunk(paddleLeftSFX);
+    Mix_FreeChunk(paddleRightSFX);
+    Mix_FreeChunk(bordersSFX);
+    Mix_FreeChunk(scoreSFX);
 }
 
 //////////////////////////

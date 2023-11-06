@@ -150,9 +150,11 @@ void setup()
     ///////////////////
 
     initializeTextures(renderer);
+    initializeMusic();
+    initializeSFX();
+    Mix_PlayMusic(music, -1);
     setupPrincipalMenu(WINDOW_WIDTH, WINDOW_HEIGHT);
     setupNormalGame(WINDOW_WIDTH, WINDOW_HEIGHT);
-
 }
 
 void update()
@@ -172,7 +174,6 @@ void update()
     ////////////////////////
     ///Update Menu Principal
     ////////////////////////
-
     
     if(gameStart == false)
     {
@@ -223,6 +224,7 @@ void destroy_window()
     SDL_DestroyWindow(window);
     destroyTexturesPrincipalMenu();
     destroyTexturesNormalGame();
+    destroyMusicSFX();
     SDL_Quit();
 }
 

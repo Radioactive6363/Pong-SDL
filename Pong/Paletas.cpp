@@ -1,5 +1,6 @@
 #include "Paletas.h"
 #include "Ball.h"
+#include "MenuTest.h"
 #include <SDL_image.h>
 #include <time.h> //Time
 #include <stdlib.h> //Rand
@@ -50,6 +51,7 @@ void collisionLeftPalette(int WINDOW_HEIGHT)
             ballimg.x = (paddleLeft.x + ballimg.width);
             ballimg.vel_x = (rand() % (ballimg.vel_x - ballRangeRandomInterval_X + 1) + ballRangeRandomInterval_X);
             ballimg.vel_y = -(rand() % (ballimg.vel_y - ballRangeRandomInterval_Y + 1) + ballRangeRandomInterval_Y);
+            Mix_PlayChannel(-1, paddleLeftSFX, 0);
         }
     }
     if (paddleLeft.y < 0)
@@ -82,6 +84,7 @@ void collisionRightPalette(int WINDOW_HEIGHT)
             ballimg.x = (paddleRight.x - ballimg.width);
             ballimg.vel_x = -(rand() % (ballimg.vel_x - ballRangeRandomInterval_X + 1) + ballRangeRandomInterval_X);
             ballimg.vel_y = -(rand() % (ballimg.vel_y - ballRangeRandomInterval_Y + 1) + ballRangeRandomInterval_Y);
+            Mix_PlayChannel(-1, paddleRightSFX, 0);
         }
     }
     if (paddleRight.y < 0)

@@ -1,5 +1,6 @@
 #include "Ball.h"
 #include "Score.h"
+#include "MenuTest.h"
 #include <SDL_image.h> 
 #include <stdio.h>
 
@@ -55,6 +56,7 @@ void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT)
         ballimg.vel_x = -ballimg.vel_x;
         ballimg.vel_y = -ballimg.vel_y;
         intRightScore++;
+        Mix_PlayChannel(-1, scoreSFX, 0);
     }
     if ((ballimg.x + ballWidth) > WINDOW_WIDTH)
     {
@@ -63,17 +65,19 @@ void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT)
         ballimg.vel_x = -ballimg.vel_x;
         ballimg.vel_y = -ballimg.vel_y;
         intLeftScore++;
+        Mix_PlayChannel(-1, scoreSFX, 0);
     }
     if (ballimg.y < 0)
     {
         ballimg.y = 1;
-
         ballimg.vel_y = -ballimg.vel_y;
+        Mix_PlayChannel(-1, bordersSFX, 0);
     }
     if ((ballimg.y + ballWidth) > WINDOW_HEIGHT)
     {
         ballimg.y = WINDOW_HEIGHT - ballimg.height;
         ballimg.vel_y = -ballimg.vel_y;
+        Mix_PlayChannel(-1, bordersSFX, 0);
     }
 }
 
