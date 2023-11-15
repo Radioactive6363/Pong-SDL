@@ -154,6 +154,10 @@ void destroyMusicSFX()
 }
 
 //////////////////////////
+///Funciones Adicionales
+//////////////////////////
+
+//////////////////////////
 //Juego
 //////////////////////////
 
@@ -166,11 +170,12 @@ void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 }
 void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
 {
-    ballMovement(delta_time); //Movimiento Pelota
-    ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT); //Colisiones Pelota
+    ballMovement(WINDOW_WIDTH, WINDOW_HEIGHT, delta_time); //Movimiento Pelota
+    ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer); //Colisiones Pelota
     collisionPalette(WINDOW_HEIGHT, cantPelotas);//Colisiones Paleta
     updateScores(renderer); //Puntaje
     updateTimers(renderer); //Update Timers
+    ballCooldownReset(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer);
 }
 void renderNormalGame(SDL_Renderer* renderer)
 {

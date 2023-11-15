@@ -6,11 +6,13 @@
 
 using namespace std;
 
-extern int scoreWidth, scoreHeight, scoreSeparation, TimerGame;
+extern int scoreWidth, scoreHeight, scoreSeparation;
+extern vector <int> timerGame;
 extern vector <int> intScores;
 
 extern Uint32 ticksTracker;
 extern bool endTimer;
+extern bool cooldownTimer;
 
 struct scores
 {

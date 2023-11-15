@@ -7,12 +7,14 @@ using namespace std;
 
 extern SDL_Texture* textureBall;
 extern int ballWidth, 
-           ballHeight, 
-           ballRangeRandomInterval_X, 
-           ballRangeRandomInterval_Y,
-           initialSpeed_X,
-           initialSpeed_Y,
-           cantPelotas;
+            ballHeight, 
+            ballRangeRandomInterval_X, 
+            ballRangeRandomInterval_Y,
+            initialSpeed_X,
+            initialSpeed_Y,
+            cantPelotas,
+            storageVelX,
+            storageVelY;
 
 struct ball
 {
@@ -28,9 +30,7 @@ extern vector<ball> ballValues;
 void textureInitialitationBall(SDL_Renderer* renderer);
 
 void setupBall(int, int);
-
-void ballCollisions(int, int);
-
-void ballMovement(float);
-
+void ballCollisions(int, int, bool&);
+void ballMovement(int, int, float);
+void ballCooldownReset(int WINDOW_WIDTH, int WINDOW_HEIGHT, bool& startCooldown);
 void renderBall(SDL_Renderer*);

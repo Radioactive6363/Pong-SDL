@@ -13,10 +13,12 @@ using namespace std;
 
 int ballWidth = 20; //Altura Pelota
 int ballHeight = 20; //Ancho Pelota
-int ballRangeRandomInterval_X = 500; //Intervalo de velocidad aleatoria. Eje X
-int ballRangeRandomInterval_Y = 500; //Intervalo de velocidad aleatoria. Eje Y
 int ballInitialSpeed_X = 1000; //Velocidad pelota Inicial. Eje X
-int BallInitialSpeed_Y = 1000; //Velocidad pelota Inicial. Eje Y
+int ballInitialSpeed_Y = 1000; //Velocidad pelota Inicial. Eje Y
+int ballRangeRandomInterval_X = 250 + ballInitialSpeed_X; //Intervalo de velocidad aleatoria. Cambiar unicamente los valores
+int ballRangeRandomInterval_Y = 250 + ballInitialSpeed_Y; //Intervalo de velocidad aleatoria. Cambiar unicamente los valores
+int storageVelX;
+int storageVelY;
 int cantPelotas = 1;
 SDL_Texture* textureBall;
 vector<ball> ballValues(cantPelotas);
@@ -41,34 +43,38 @@ void textureInitialitationBall(SDL_Renderer* renderer)
 
 void setupBall(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
-    ballValues[0].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
-    ballValues[0].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
-    ballValues[0].width = ballWidth;
-    ballValues[0].height = ballHeight;
-    ballValues[0].vel_x = ballInitialSpeed_X;
-    ballValues[0].vel_y = BallInitialSpeed_Y;
+    for (size_t i = 0; i < cantPelotas; i++)
+    {
+        ballValues[i].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
+        ballValues[i].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
+        ballValues[i].width = ballWidth;
+        ballValues[i].height = ballHeight;
+        ballValues[i].vel_x = ballInitialSpeed_X;
+        ballValues[i].vel_y = ballInitialSpeed_Y;
+    }
 }
-
-void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT)
+void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT, bool &startCooldown)
 {
     for (int i = 0; i < cantPelotas; i++)
     {
-        if (ballValues[i].x < 0)
+        if (ballValues[i].x <= 0)
         {
             ballValues[i].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
             ballValues[i].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
             ballValues[i].vel_x = -ballValues[i].vel_x;
             ballValues[i].vel_y = -ballValues[i].vel_y;
             intScores[0]++;
+            startCooldown = true;
             Mix_PlayChannel(-1, scoreSFX, 0);
         }
-        if ((ballValues[i].x + ballWidth) > WINDOW_WIDTH)
+        if ((ballValues[i].x + ballWidth) >= WINDOW_WIDTH)
         {
             ballValues[i].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
             ballValues[i].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
             ballValues[i].vel_x = -ballValues[i].vel_x;
             ballValues[i].vel_y = -ballValues[i].vel_y;
             intScores[1]++;
+            startCooldown = true;
             Mix_PlayChannel(-1, scoreSFX, 0);
         }
         if (ballValues[i].y < 0)
@@ -85,12 +91,51 @@ void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT)
         }
     }
 }
-void ballMovement(float factor)
+void ballMovement(int WINDOW_WIDTH,int WINDOW_HEIGHT,float factor)
 {
     for (int i = 0; i < cantPelotas; i++)
     {
         ballValues[i].x += ballValues[i].vel_x * factor;
         ballValues[i].y += ballValues[i].vel_y * factor;
+    }
+}
+void ballCooldownReset(int WINDOW_WIDTH, int WINDOW_HEIGHT,bool &startCooldown)
+{
+    for (int i = 0; i < cantPelotas; i++)
+    {
+        if (startCooldown)
+        {
+            ballValues[i].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
+            ballValues[i].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
+            switch (rand() % 4 + 1)
+            {
+                case 1:
+                {
+                    ballValues[i].vel_x = ballInitialSpeed_X;
+                    ballValues[i].vel_y = -ballInitialSpeed_Y;
+                    break;
+                }
+                case 2:
+                {
+                    ballValues[i].vel_x = -ballInitialSpeed_X;
+                    ballValues[i].vel_y = ballInitialSpeed_Y;
+                    break;
+                }
+                case 3:
+                {
+                    ballValues[i].vel_x = ballInitialSpeed_X;
+                    ballValues[i].vel_y = ballInitialSpeed_Y;
+                    break;
+                }
+                case 4:
+                {
+                    ballValues[i].vel_x = -ballInitialSpeed_X;
+                    ballValues[i].vel_y = -ballInitialSpeed_Y;
+                    break;
+                }
+            }
+            
+        }
     }
 }
 

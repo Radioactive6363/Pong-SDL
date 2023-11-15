@@ -35,7 +35,6 @@ void textureInitialitationPalette(SDL_Renderer* renderer)
             fprintf(stderr, IMG_GetError());
         }
     }
-    
 } 
 
 ////////////////////
@@ -66,9 +65,9 @@ void setupPalette(int WINDOW_WIDTH,int WINDOW_HEIGHT)
 }
 void collisionPalette(int WINDOW_HEIGHT, int cantPelotas)
 {
-    for (size_t i = 0; i < cantPaddles; i++)
+    for (int i = 0; i < cantPaddles; i++)
     {
-        for (size_t j = 0; j < cantPelotas; j++)
+        for (int j = 0; j < cantPelotas; j++)
         {
             if (i == 0)
             {
@@ -78,8 +77,23 @@ void collisionPalette(int WINDOW_HEIGHT, int cantPelotas)
                     if (((ballValues[j].y + reachTolerance) <= (paddle[i].y + paddleHeight)) && (ballValues[j].y + ballHeight - reachTolerance) >= paddle[i].y)
                     {
                         ballValues[j].x = (paddle[i].x + ballValues[j].width);
-                        ballValues[j].vel_x = (rand() % (ballValues[j].vel_x - ballRangeRandomInterval_X + 1) + ballRangeRandomInterval_X);
-                        ballValues[j].vel_y = -(rand() % (ballValues[j].vel_y - ballRangeRandomInterval_Y + 1) + ballRangeRandomInterval_Y);
+                        ballValues[j].vel_x = 1000;
+                        ballValues[j].vel_x = (rand() % (ballRangeRandomInterval_X - ballValues[j].vel_x + 1) + ballValues[j].vel_x);
+                        switch(rand() % 2 + 1)
+                        {
+                            case 1:
+                            {
+                                ballValues[j].vel_y = 1000;
+                                ballValues[j].vel_y = rand() % (ballRangeRandomInterval_Y - ballValues[j].vel_y + 1) + ballValues[j].vel_y;
+                                break;
+                            }
+                            case 2:
+                            {
+                                ballValues[j].vel_y = 1000;
+                                ballValues[j].vel_y = -(rand() % (ballRangeRandomInterval_Y - ballValues[j].vel_y + 1) + ballValues[j].vel_y);
+                                break;
+                            }
+                        }
                         Mix_PlayChannel(-1, paddleLeftSFX, 0);
                     }
                 }
@@ -94,13 +108,29 @@ void collisionPalette(int WINDOW_HEIGHT, int cantPelotas)
             }
             if (i == 1)
             {
+                ///Paleta Der
                 if ((ballValues[j].x + ballWidth) >= paddle[i].x && ballValues[j].x <= paddle[i].x + paddleWidth)
                 {
                     if (((ballValues[j].y + ballHeight - reachTolerance) >= paddle[i].y && (ballValues[j].y + reachTolerance) <= (paddle[i].y + paddleHeight)))
                     {
                         ballValues[j].x = (paddle[i].x - ballValues[j].width);
-                        ballValues[j].vel_x = -(rand() % (ballValues[j].vel_x - ballRangeRandomInterval_X + 1) + ballRangeRandomInterval_X);
-                        ballValues[j].vel_y = -(rand() % (ballValues[j].vel_y - ballRangeRandomInterval_Y + 1) + ballRangeRandomInterval_Y);
+                        ballValues[j].vel_x = 1000;
+                        ballValues[j].vel_x = -(rand() % (ballRangeRandomInterval_X - ballValues[j].vel_x + 1) + ballValues[j].vel_x);
+                        switch (rand() % 2 + 1)
+                        {
+                            case 1:
+                            {
+                                ballValues[j].vel_y = 1000;
+                                ballValues[j].vel_y = rand() % (ballRangeRandomInterval_Y - ballValues[j].vel_y + 1) + ballValues[j].vel_y;
+                                break;
+                            }
+                            case 2:
+                            {
+                                ballValues[j].vel_y = 1000;
+                                ballValues[j].vel_y = -(rand() % (ballRangeRandomInterval_Y - ballValues[j].vel_y + 1) + ballValues[j].vel_y);
+                                break;
+                            }
+                        }
                         Mix_PlayChannel(-1, paddleRightSFX, 0);
                     }
                 }
@@ -114,7 +144,7 @@ void collisionPalette(int WINDOW_HEIGHT, int cantPelotas)
                 }
             }
         }
-        }
+    }
 }
 void renderPalette(SDL_Renderer* renderer)
 {

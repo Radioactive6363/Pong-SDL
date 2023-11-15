@@ -10,16 +10,17 @@ using namespace std;
 
 //Variables Modificables
 int cantScores = 2;
-int cantTimers = 1;
+int cantTimers = 2;
 int scoreWidth = 100; //Alto de Score
 int scoreHeight = 150;//Ancho de Score
 int scoreSeparation = 100;//Separacion respecto al centro
 vector <int> intScores = { 0,0 };
 Uint32 ticksTracker = 0; //Tracker en milisegundos. NO TOCAR
 bool endTimer = false;
-int TimerGame = 10 + (1); //Cantidad de segundos x partido. No cambiar (1)
+bool cooldownTimer = false;
+vector<int> timerGame = { 10 + (1), 3}; //Cantidad de segundos x partido. No cambiar (1)
 int timerGameWidth = 150; //Alto de tiempo
-int timerGameHeight = 150;//Ancho de tiempo
+int timerGameHeight = 200;//Ancho de tiempo
 
 //Almacenamiento de Strings
 vector<SDL_Color> colorTxtScores(cantScores), colorTxtTimers(cantTimers);
@@ -104,10 +105,20 @@ void setupTimers(int WINDOW_WIDTH, int WINDOW_HEIGHT)
     for (int i = 0; i < cantTimers; i++)
     {
          //Timer
-         timer[i].x = WINDOW_WIDTH / 2 - (timerGameWidth / 2);
-         timer[i].y = WINDOW_HEIGHT - (WINDOW_HEIGHT / 8) - (timerGameHeight / 2);
-         timer[i].width = timerGameWidth;
-         timer[i].height = timerGameHeight;
+        if (i != 1)
+        {
+            timer[i].x = WINDOW_WIDTH / 2 - (timerGameWidth / 2);
+            timer[i].y = WINDOW_HEIGHT - (WINDOW_HEIGHT / 8) - (timerGameHeight / 2);
+            timer[i].width = timerGameWidth;
+            timer[i].height = timerGameHeight;
+        }
+        else
+        {
+            timer[i].x = WINDOW_WIDTH / 2 - (timerGameWidth / 2);
+            timer[i].y = (WINDOW_HEIGHT / 2)- (timerGameHeight / 2);
+            timer[i].width = timerGameWidth;
+            timer[i].height = timerGameHeight;
+        }
     }
 }
 void updateTimers(SDL_Renderer* renderer)
@@ -115,9 +126,16 @@ void updateTimers(SDL_Renderer* renderer)
     for (int i = 0; i < cantTimers; i++)
     {
         //Timer
-        colorTxtTimers[i] = { 255,255,255,255 };
+        if (i != 1)
+        {
+            colorTxtTimers[i] = { 255,255,255,255/4 };
+        }
+        else
+        {
+            colorTxtTimers[i] = { 255,255,255,255/2 };
+        }
         charTimers[i] = stringTimers[i].c_str();
-        stringTimers[i] = to_string(TimerGame);
+        stringTimers[i] = to_string(timerGame[i]);
         surfaceTimers[i] = TTF_RenderText_Solid(font, charTimers[i], colorTxtTimers[i]);
         if (!surfaceTimers[i])
         {
@@ -127,13 +145,30 @@ void updateTimers(SDL_Renderer* renderer)
         textureTimers[i] = SDL_CreateTextureFromSurface(renderer, surfaceTimers[i]);
         SDL_FreeSurface(surfaceTimers[i]);
 
-        while (ticksTracker <= SDL_GetTicks() && endTimer == false)
+        if (!cooldownTimer)
         {
-            TimerGame = --TimerGame;
+            timerGame[1] = 3;
+        }
+
+        while (ticksTracker <= SDL_GetTicks())
+        {
             ticksTracker = SDL_GetTicks() + 1000.0f;
-            if (TimerGame == 0)
+            //TimerGame[i] = --TimerGame[i]; NO FUNCIONAL. Solo modifica el timer, no el "Cooldown"
+            if (!endTimer)
+            {
+                timerGame[0] = --timerGame[0];
+            }
+            if (cooldownTimer)
+            {
+                timerGame[1] = --timerGame[1];
+            }
+            if (timerGame[0] <= 0) //timerGame[i] == 0 TAMPOCO FUNCIONAL
             {
                 endTimer = true;
+            }
+            if (timerGame[1] <= 0) //timerGame[i] == 0 TAMPOCO FUNCIONAL
+            {
+                cooldownTimer = false;
             }
         }
     }
@@ -149,7 +184,14 @@ void renderTimers(SDL_Renderer* renderer)
         (int)timer[i].width,
         (int)timer[i].height
         };
-        SDL_RenderCopy(renderer, textureTimers[i], nullptr, &rectTimers[i]);
+        if (!endTimer)
+        {
+            SDL_RenderCopy(renderer, textureTimers[0], nullptr, &rectTimers[0]);
+        }
+        if (cooldownTimer)
+        {
+            SDL_RenderCopy(renderer, textureTimers[1], nullptr, &rectTimers[1]);
+        }
     }
 }
 
@@ -162,6 +204,6 @@ void destroyTextureScoresTimers()
     }
     for (int j = 0; j < cantTimers; j++)
     {
-        SDL_DestroyTexture(textureScores[j]);
+        SDL_DestroyTexture(textureTimers[j]);
     }
 }
