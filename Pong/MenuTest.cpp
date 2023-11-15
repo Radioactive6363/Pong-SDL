@@ -166,18 +166,14 @@ void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
     setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
     setupPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paletas
-    setupScoreLeft(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
-    setupScoreRight(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Derecho
-    setupTimerGame(WINDOW_WIDTH, WINDOW_HEIGHT);
+    setupScores(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
 }
 void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
 {
     ballMovement(delta_time); //Movimiento Pelota
     ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT); //Colisiones Pelota
     collisionPalette(WINDOW_HEIGHT);
-    updateScoreLeft(renderer); //Puntaje Izquierdo
-    updateScoreRight(renderer); //Puntaje Derecho
-    updateTimerGame(renderer);
+    updateScores(renderer); //Puntaje Izquierdo
 }
 void renderNormalGame(SDL_Renderer* renderer)
 {
@@ -188,34 +184,14 @@ void renderNormalGame(SDL_Renderer* renderer)
      (int)ballimg.width,
      (int)ballimg.height
     };
-    SDL_Rect rectTimer_Game = {
-        (int)timer.x,
-        (int)timer.y,
-        (int)timer.width,
-        (int)timer.height
-    };
-    SDL_Rect rectScore_Left = {
-        (int)scoreLeft.x,
-        (int)scoreLeft.y,
-        (int)scoreLeft.width,
-        (int)scoreLeft.height,
-    };
-    SDL_Rect rectScore_Right = {
-        (int)scoreRight.x,
-        (int)scoreRight.y,
-        (int)scoreRight.width,
-        (int)scoreRight.height,
-    };
+   
     SDL_RenderCopy(renderer, textureBall, nullptr, &rectBall);
     renderPalette(renderer);
-    SDL_RenderCopy(renderer, textureTimerGame, nullptr, &rectTimer_Game);
-    SDL_RenderCopy(renderer, textureScoreLeft, nullptr, &rectScore_Left);
-    SDL_RenderCopy(renderer, textureScoreRight, nullptr, &rectScore_Right);
+    renderScores(renderer);
 }
 void destroyTexturesNormalGame()
 {
     SDL_DestroyTexture(textureBall);
     destroyTexturePaddles();
-    SDL_DestroyTexture(textureScoreRight);
-    SDL_DestroyTexture(textureScoreLeft);
+    destroyTextureScore();
 }

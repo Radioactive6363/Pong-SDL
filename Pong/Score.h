@@ -2,33 +2,29 @@
 #include <string>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include <vector>
 
-extern int scoreWidth, scoreHeight, scoreSeparation, intLeftScore, intRightScore, TimerGame;
-extern std::string stringScoreLeft, stringScoreRight, stringTimerGame;
-extern const char *scoreCharLeft, *scoreCharRight, *timerCharGame;
+using namespace std;
+
+extern int scoreWidth, scoreHeight, scoreSeparation, TimerGame;
+extern vector <int> intScores;
+extern vector<string> stringScores;
+extern vector<const char*> scoreChar;
 extern Uint32 ticksTracker;
 extern bool endTimer;
 
-struct score
+struct scores
 {
     int x;
     int y;
     int width;
     int height;
 };
-extern score scoreLeft, scoreRight, timer;
-extern SDL_Surface* surfaceScoreLeft;
-extern SDL_Texture* textureScoreLeft;
-extern SDL_Surface* surfaceScoreRight;
-extern SDL_Texture* textureScoreRight;
-extern SDL_Surface* surfaceTimerGame;
-extern SDL_Texture* textureTimerGame;
+extern vector<scores> score;
+extern vector<SDL_Surface*> surfaceScores;
+extern vector<SDL_Texture*> textureScores;
 
-void setupScoreLeft(int, int);
-void updateScoreLeft(SDL_Renderer*);
-
-void setupScoreRight(int, int);
-void updateScoreRight(SDL_Renderer*);
-
-void setupTimerGame(int, int);
-void updateTimerGame(SDL_Renderer*);
+void setupScores(int, int);
+void updateScores(SDL_Renderer*);
+void renderScores(SDL_Renderer*);
+void destroyTextureScore();

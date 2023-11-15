@@ -11,8 +11,8 @@ ball ballimg;
 ///Variables
 /////////////
 
-int ballWidth = 30; //Altura Pelota
-int ballHeight = 30; //Ancho Pelota
+int ballWidth = 20; //Altura Pelota
+int ballHeight = 20; //Ancho Pelota
 int ballRangeRandomInterval_X = 500; //Intervalo de velocidad aleatoria. Eje X
 int ballRangeRandomInterval_Y = 500; //Intervalo de velocidad aleatoria. Eje Y
 int ballInitialSpeed_X = 1000; //Velocidad pelota Inicial. Eje X
@@ -55,7 +55,7 @@ void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT)
         ballimg.y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
         ballimg.vel_x = -ballimg.vel_x;
         ballimg.vel_y = -ballimg.vel_y;
-        intRightScore++;
+        intScores[0]++;
         Mix_PlayChannel(-1, scoreSFX, 0);
     }
     if ((ballimg.x + ballWidth) > WINDOW_WIDTH)
@@ -64,7 +64,7 @@ void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT)
         ballimg.y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
         ballimg.vel_x = -ballimg.vel_x;
         ballimg.vel_y = -ballimg.vel_y;
-        intLeftScore++;
+        intScores[1]++;
         Mix_PlayChannel(-1, scoreSFX, 0);
     }
     if (ballimg.y < 0)

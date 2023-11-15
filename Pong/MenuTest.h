@@ -25,10 +25,6 @@ struct texts
 extern vector<texts> txtMenu;
 extern vector<SDL_Surface*> surfaceMenu;
 extern vector<SDL_Texture*> textureMenu;
-//extern texts txtStart, txtOptions, txtQuit;
-//extern SDL_Surface *surfaceStart, *surfaceOptions, *surfaceQuit;
-//extern SDL_Texture *textureStart, *textureOptions, *textureQuit;
-
 
 
 void initializeTextures(SDL_Renderer*);

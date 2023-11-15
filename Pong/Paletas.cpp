@@ -130,7 +130,7 @@ void renderPalette(SDL_Renderer* renderer)
 }
 void destroyTexturePaddles()
 {
-    for (size_t i = 0; i < cantPaddles; i++)
+    for (int i = 0; i < cantPaddles; i++)
     {
         SDL_DestroyTexture(texturePaddle[i]);
     }
