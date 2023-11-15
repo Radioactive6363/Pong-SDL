@@ -1,11 +1,11 @@
 #include "Ball.h"
 #include "Score.h"
-#include "MenuTest.h"
+#include "MenuyEventos.h"
 #include <SDL_image.h> 
 #include <stdio.h>
+#include <vector>
 
-SDL_Texture* textureBall;
-ball ballimg;
+using namespace std;
 
 /////////////
 ///Variables
@@ -17,7 +17,9 @@ int ballRangeRandomInterval_X = 500; //Intervalo de velocidad aleatoria. Eje X
 int ballRangeRandomInterval_Y = 500; //Intervalo de velocidad aleatoria. Eje Y
 int ballInitialSpeed_X = 1000; //Velocidad pelota Inicial. Eje X
 int BallInitialSpeed_Y = 1000; //Velocidad pelota Inicial. Eje Y
-
+int cantPelotas = 1;
+SDL_Texture* textureBall;
+vector<ball> ballValues(cantPelotas);
 
 ///////////////////////////
 ///Inicializado de textura
@@ -39,50 +41,70 @@ void textureInitialitationBall(SDL_Renderer* renderer)
 
 void setupBall(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
-    ballimg.x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
-    ballimg.y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
-    ballimg.width = ballWidth;
-    ballimg.height = ballHeight;
-    ballimg.vel_x = ballInitialSpeed_X;
-    ballimg.vel_y = BallInitialSpeed_Y;
+    ballValues[0].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
+    ballValues[0].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
+    ballValues[0].width = ballWidth;
+    ballValues[0].height = ballHeight;
+    ballValues[0].vel_x = ballInitialSpeed_X;
+    ballValues[0].vel_y = BallInitialSpeed_Y;
 }
 
 void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
-    if (ballimg.x < 0)
+    for (int i = 0; i < cantPelotas; i++)
     {
-        ballimg.x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
-        ballimg.y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
-        ballimg.vel_x = -ballimg.vel_x;
-        ballimg.vel_y = -ballimg.vel_y;
-        intScores[0]++;
-        Mix_PlayChannel(-1, scoreSFX, 0);
+        if (ballValues[i].x < 0)
+        {
+            ballValues[i].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
+            ballValues[i].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
+            ballValues[i].vel_x = -ballValues[i].vel_x;
+            ballValues[i].vel_y = -ballValues[i].vel_y;
+            intScores[0]++;
+            Mix_PlayChannel(-1, scoreSFX, 0);
+        }
+        if ((ballValues[i].x + ballWidth) > WINDOW_WIDTH)
+        {
+            ballValues[i].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
+            ballValues[i].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
+            ballValues[i].vel_x = -ballValues[i].vel_x;
+            ballValues[i].vel_y = -ballValues[i].vel_y;
+            intScores[1]++;
+            Mix_PlayChannel(-1, scoreSFX, 0);
+        }
+        if (ballValues[i].y < 0)
+        {
+            ballValues[i].y = 1;
+            ballValues[i].vel_y = -ballValues[i].vel_y;
+            Mix_PlayChannel(-1, bordersSFX, 0);
+        }
+        if ((ballValues[i].y + ballWidth) > WINDOW_HEIGHT)
+        {
+            ballValues[i].y = WINDOW_HEIGHT - ballValues[i].height;
+            ballValues[i].vel_y = -ballValues[i].vel_y;
+            Mix_PlayChannel(-1, bordersSFX, 0);
+        }
     }
-    if ((ballimg.x + ballWidth) > WINDOW_WIDTH)
+}
+void ballMovement(float factor)
+{
+    for (int i = 0; i < cantPelotas; i++)
     {
-        ballimg.x = (WINDOW_WIDTH / 2) - (ballWidth / 2);
-        ballimg.y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
-        ballimg.vel_x = -ballimg.vel_x;
-        ballimg.vel_y = -ballimg.vel_y;
-        intScores[1]++;
-        Mix_PlayChannel(-1, scoreSFX, 0);
-    }
-    if (ballimg.y < 0)
-    {
-        ballimg.y = 1;
-        ballimg.vel_y = -ballimg.vel_y;
-        Mix_PlayChannel(-1, bordersSFX, 0);
-    }
-    if ((ballimg.y + ballWidth) > WINDOW_HEIGHT)
-    {
-        ballimg.y = WINDOW_HEIGHT - ballimg.height;
-        ballimg.vel_y = -ballimg.vel_y;
-        Mix_PlayChannel(-1, bordersSFX, 0);
+        ballValues[i].x += ballValues[i].vel_x * factor;
+        ballValues[i].y += ballValues[i].vel_y * factor;
     }
 }
 
-void ballMovement(float factor)
+void renderBall(SDL_Renderer* renderer)
 {
-    ballimg.x += ballimg.vel_x * factor;
-    ballimg.y += ballimg.vel_y * factor;
+    vector <SDL_Rect> rectBall(cantPelotas);
+    for (size_t i = 0; i < cantPelotas; i++)
+    {
+        rectBall[i] = {
+        (int)ballValues[i].x,
+        (int)ballValues[i].y,
+        (int)ballValues[i].width,
+        (int)ballValues[i].height
+        };
+        SDL_RenderCopy(renderer, textureBall, nullptr, &rectBall[i]);
+    }
 }

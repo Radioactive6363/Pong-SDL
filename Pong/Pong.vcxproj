@@ -135,14 +135,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="MenuTest.cpp" />
+    <ClCompile Include="MenuyEventos.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Paletas.cpp" />
     <ClCompile Include="Score.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
-    <ClInclude Include="MenuTest.h" />
+    <ClInclude Include="MenuyEventos.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Paletas.h" />
     <ClInclude Include="Score.h" />

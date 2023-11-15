@@ -8,7 +8,7 @@
 #include <time.h> //Time
 #include "main.h"
 #include "Paletas.h"
-#include "MenuTest.h"
+#include "MenuyEventos.h"
 
 int initialize_SDL()
 {

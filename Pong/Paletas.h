@@ -26,6 +26,6 @@ extern vector<SDL_Texture*> texturePaddle;
 void textureInitialitationPalette(SDL_Renderer* renderer);
 
 void setupPalette(int, int);
-void collisionPalette(int );
+void collisionPalette(int, int);
 void renderPalette(SDL_Renderer*);
 void destroyTexturePaddles();

@@ -1,6 +1,6 @@
 #include "Paletas.h"
 #include "Ball.h"
-#include "MenuTest.h"
+#include "MenuyEventos.h"
 #include <SDL_image.h>
 #include <time.h> //Time
 #include <stdlib.h> //Rand
@@ -64,55 +64,57 @@ void setupPalette(int WINDOW_WIDTH,int WINDOW_HEIGHT)
         }
     }
 }
-void collisionPalette(int WINDOW_HEIGHT)
+void collisionPalette(int WINDOW_HEIGHT, int cantPelotas)
 {
     for (size_t i = 0; i < cantPaddles; i++)
     {
-        if (i == 0)
+        for (size_t j = 0; j < cantPelotas; j++)
         {
-            ///Paleta Izq
-            if (ballimg.x <= paddle[i].x + paddleWidth && (ballimg.x + ballWidth) >= paddle[i].x)
+            if (i == 0)
             {
-                if (((ballimg.y + reachTolerance) <= (paddle[i].y + paddleHeight)) && (ballimg.y + ballHeight - reachTolerance) >= paddle[i].y)
+                ///Paleta Izq
+                if (ballValues[j].x <= paddle[i].x + paddleWidth && (ballValues[j].x + ballWidth) >= paddle[i].x)
                 {
-                    ballimg.x = (paddle[i].x + ballimg.width);
-                    ballimg.vel_x = (rand() % (ballimg.vel_x - ballRangeRandomInterval_X + 1) + ballRangeRandomInterval_X);
-                    ballimg.vel_y = -(rand() % (ballimg.vel_y - ballRangeRandomInterval_Y + 1) + ballRangeRandomInterval_Y);
-                    Mix_PlayChannel(-1, paddleLeftSFX, 0);
+                    if (((ballValues[j].y + reachTolerance) <= (paddle[i].y + paddleHeight)) && (ballValues[j].y + ballHeight - reachTolerance) >= paddle[i].y)
+                    {
+                        ballValues[j].x = (paddle[i].x + ballValues[j].width);
+                        ballValues[j].vel_x = (rand() % (ballValues[j].vel_x - ballRangeRandomInterval_X + 1) + ballRangeRandomInterval_X);
+                        ballValues[j].vel_y = -(rand() % (ballValues[j].vel_y - ballRangeRandomInterval_Y + 1) + ballRangeRandomInterval_Y);
+                        Mix_PlayChannel(-1, paddleLeftSFX, 0);
+                    }
+                }
+                if (paddle[i].y < 0)
+                {
+                    paddle[i].y = 0;
+                }
+                if (paddle[i].y + paddleHeight > WINDOW_HEIGHT)
+                {
+                    paddle[i].y = WINDOW_HEIGHT - paddleHeight;
                 }
             }
-            if (paddle[i].y < 0)
+            if (i == 1)
             {
-                paddle[i].y = 0;
-            }
-            if (paddle[i].y + paddleHeight > WINDOW_HEIGHT)
-            {
-                paddle[i].y = WINDOW_HEIGHT - paddleHeight;
-            }
-        }
-        if (i == 1)
-        {
-            if ((ballimg.x + ballWidth) >= paddle[i].x && ballimg.x <= paddle[i].x + paddleWidth)
-            {
-                if (((ballimg.y + ballHeight - reachTolerance) >= paddle[i].y && (ballimg.y + reachTolerance) <= (paddle[i].y + paddleHeight)))
+                if ((ballValues[j].x + ballWidth) >= paddle[i].x && ballValues[j].x <= paddle[i].x + paddleWidth)
                 {
-                    ballimg.x = (paddle[i].x - ballimg.width);
-                    ballimg.vel_x = -(rand() % (ballimg.vel_x - ballRangeRandomInterval_X + 1) + ballRangeRandomInterval_X);
-                    ballimg.vel_y = -(rand() % (ballimg.vel_y - ballRangeRandomInterval_Y + 1) + ballRangeRandomInterval_Y);
-                    Mix_PlayChannel(-1, paddleRightSFX, 0);
+                    if (((ballValues[j].y + ballHeight - reachTolerance) >= paddle[i].y && (ballValues[j].y + reachTolerance) <= (paddle[i].y + paddleHeight)))
+                    {
+                        ballValues[j].x = (paddle[i].x - ballValues[j].width);
+                        ballValues[j].vel_x = -(rand() % (ballValues[j].vel_x - ballRangeRandomInterval_X + 1) + ballRangeRandomInterval_X);
+                        ballValues[j].vel_y = -(rand() % (ballValues[j].vel_y - ballRangeRandomInterval_Y + 1) + ballRangeRandomInterval_Y);
+                        Mix_PlayChannel(-1, paddleRightSFX, 0);
+                    }
+                }
+                if (paddle[i].y < 0)
+                {
+                    paddle[i].y = 0;
+                }
+                if (paddle[i].y + paddleHeight > WINDOW_HEIGHT)
+                {
+                    paddle[i].y = WINDOW_HEIGHT - paddleHeight;
                 }
             }
-            if (paddle[i].y < 0)
-            {
-                paddle[i].y = 0;
-            }
-            if (paddle[i].y + paddleHeight > WINDOW_HEIGHT)
-            {
-                paddle[i].y = WINDOW_HEIGHT - paddleHeight;
-            }
         }
-    }
-    
+        }
 }
 void renderPalette(SDL_Renderer* renderer)
 {

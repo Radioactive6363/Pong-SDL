@@ -27,7 +27,7 @@
     <ClCompile Include="Paletas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MenuTest.cpp">
+    <ClCompile Include="MenuyEventos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClInclude Include="Paletas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MenuTest.h">
+    <ClInclude Include="MenuyEventos.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

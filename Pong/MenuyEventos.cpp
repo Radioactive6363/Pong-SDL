@@ -1,4 +1,4 @@
-#include "MenuTest.h"
+#include "MenuyEventos.h"
 #include <string>
 #include <stdio.h>
 #include <SDL_ttf.h> 
@@ -15,21 +15,16 @@ using namespace std;
 int txtWidth = 300; //Ancho de texto.
 int txtHeight = 300;//Alto de texto.
 int txtSeparation = 250; //Separacion de textos.
-int cantTextos = 3;
+int cantTextos = 3; //Cantidad de Textos Solicitados.
 Mix_Music* music = NULL;
 Mix_Chunk* paddleLeftSFX = NULL;
 Mix_Chunk* paddleRightSFX = NULL;
 Mix_Chunk* bordersSFX = NULL;
 Mix_Chunk* scoreSFX = NULL;
-
 TTF_Font *font;
-
 vector<texts> txtMenu(cantTextos);
 vector<SDL_Surface*> surfaceMenu(cantTextos);
 vector<SDL_Texture*> textureMenu(cantTextos);
-//texts txtStart, txtOptions, txtQuit;
-//SDL_Surface *surfaceStart, *surfaceOptions, *surfaceQuit;
-//SDL_Texture *textureStart, *textureOptions, *textureQuit;
 
 //////////////////
 //Fuente de texto.
@@ -166,32 +161,27 @@ void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
     setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
     setupPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paletas
-    setupScores(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
+    setupScores(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje
+    setupTimers(WINDOW_WIDTH, WINDOW_HEIGHT); //Timers
 }
 void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
 {
     ballMovement(delta_time); //Movimiento Pelota
     ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT); //Colisiones Pelota
-    collisionPalette(WINDOW_HEIGHT);
-    updateScores(renderer); //Puntaje Izquierdo
+    collisionPalette(WINDOW_HEIGHT, cantPelotas);//Colisiones Paleta
+    updateScores(renderer); //Puntaje
+    updateTimers(renderer); //Update Timers
 }
 void renderNormalGame(SDL_Renderer* renderer)
 {
-    //vector<SDL_Rect> rectGameTextures(6);
-    SDL_Rect rectBall = {
-     (int)ballimg.x,
-     (int)ballimg.y,
-     (int)ballimg.width,
-     (int)ballimg.height
-    };
-   
-    SDL_RenderCopy(renderer, textureBall, nullptr, &rectBall);
+    renderBall(renderer);
     renderPalette(renderer);
     renderScores(renderer);
+    renderTimers(renderer);
 }
 void destroyTexturesNormalGame()
 {
     SDL_DestroyTexture(textureBall);
     destroyTexturePaddles();
-    destroyTextureScore();
+    destroyTextureScoresTimers();
 }

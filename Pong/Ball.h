@@ -1,6 +1,9 @@
 #pragma once
 #include <SDL_image.h> 
 #include <stdio.h>
+#include <vector>
+
+using namespace std;
 
 extern SDL_Texture* textureBall;
 extern int ballWidth, 
@@ -8,7 +11,8 @@ extern int ballWidth,
            ballRangeRandomInterval_X, 
            ballRangeRandomInterval_Y,
            initialSpeed_X,
-           initialSpeed_Y;
+           initialSpeed_Y,
+           cantPelotas;
 
 struct ball
 {
@@ -19,7 +23,7 @@ struct ball
     int vel_x;
     int vel_y;
 };
-extern ball ballimg;
+extern vector<ball> ballValues;
 
 void textureInitialitationBall(SDL_Renderer* renderer);
 
@@ -29,7 +33,4 @@ void ballCollisions(int, int);
 
 void ballMovement(float);
 
-
-
-//ERROR DE INCLUDE.
-//ERROR DE GETCHAR
+void renderBall(SDL_Renderer*);
