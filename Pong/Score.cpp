@@ -86,7 +86,7 @@ void updateScores(SDL_Renderer* renderer)
 void renderScores(SDL_Renderer* renderer)
 {
     vector<SDL_Rect> rectScores(cantScores);
-    for (size_t i = 0; i < cantScores; i++)
+    for (int i = 0; i < cantScores; i++)
     {
         rectScores[i] = {
         (int)score[i].x,
@@ -118,7 +118,7 @@ void updateTimers(SDL_Renderer* renderer)
         colorTxtTimers[i] = { 255,255,255,255 };
         charTimers[i] = stringTimers[i].c_str();
         stringTimers[i] = to_string(TimerGame);
-        surfaceTimers[i] = TTF_RenderText_Solid(font, charScores[i], colorTxtTimers[i]);
+        surfaceTimers[i] = TTF_RenderText_Solid(font, charTimers[i], colorTxtTimers[i]);
         if (!surfaceTimers[i])
         {
             fprintf(stderr, "Surface Timer error\n");
@@ -140,16 +140,16 @@ void updateTimers(SDL_Renderer* renderer)
 }
 void renderTimers(SDL_Renderer* renderer)
 {
-    vector<SDL_Rect> rectScores(cantScores);
-    for (size_t i = 0; i < cantScores; i++)
+    vector<SDL_Rect> rectTimers(cantTimers);
+    for (int i = 0; i < cantTimers; i++)
     {
-        rectScores[i] = {
-        (int)score[i].x,
-        (int)score[i].y,
-        (int)score[i].width,
-        (int)score[i].height
+        rectTimers[i] = {
+        (int)timer[i].x,
+        (int)timer[i].y,
+        (int)timer[i].width,
+        (int)timer[i].height
         };
-        SDL_RenderCopy(renderer, textureScores[i], nullptr, &rectScores[i]);
+        SDL_RenderCopy(renderer, textureTimers[i], nullptr, &rectTimers[i]);
     }
 }
 
