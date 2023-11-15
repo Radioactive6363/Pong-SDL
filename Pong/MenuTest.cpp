@@ -4,14 +4,18 @@
 #include <SDL_ttf.h> 
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <vector>
 #include "Ball.h"
 #include "Score.h"
 #include "Paletas.h"
+
+using namespace std;
 
 //Variables Modificables
 int txtWidth = 300; //Ancho de texto.
 int txtHeight = 300;//Alto de texto.
 int txtSeparation = 250; //Separacion de textos.
+int cantTextos = 3;
 Mix_Music* music = NULL;
 Mix_Chunk* paddleLeftSFX = NULL;
 Mix_Chunk* paddleRightSFX = NULL;
@@ -19,9 +23,13 @@ Mix_Chunk* bordersSFX = NULL;
 Mix_Chunk* scoreSFX = NULL;
 
 TTF_Font *font;
-texts txtStart, txtOptions, txtQuit;
-SDL_Surface *surfaceStart, *surfaceOptions, *surfaceQuit;
-SDL_Texture *textureStart, *textureOptions, *textureQuit;
+
+vector<texts> txtMenu(cantTextos);
+vector<SDL_Surface*> surfaceMenu(cantTextos);
+vector<SDL_Texture*> textureMenu(cantTextos);
+//texts txtStart, txtOptions, txtQuit;
+//SDL_Surface *surfaceStart, *surfaceOptions, *surfaceQuit;
+//SDL_Texture *textureStart, *textureOptions, *textureQuit;
 
 //////////////////
 //Fuente de texto.
@@ -39,63 +47,93 @@ void FontInitialitation()
 ////////////////////
 //Funciones de Menu
 
-void setupStart(int WINDOW_WIDTH, int WINDOW_HEIGHT)
+void setupMenu(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
-    txtStart.x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
-    txtStart.y = (WINDOW_HEIGHT / 2) - (txtHeight / 2) - 200;
-    txtStart.width = txtWidth;
-    txtStart.height = txtHeight;
-}
-void updateStart(SDL_Renderer* renderer)
-{
-    surfaceStart = TTF_RenderText_Solid(font, "Start", {255,255,255});
-    if (!surfaceStart)
+    for (int i = 0; i < cantTextos; i++)
     {
-        fprintf(stderr, "Menu Surface error\n");
-        fprintf(stderr, IMG_GetError());
+        if (i == 0)
+        {
+            txtMenu[i].x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
+            txtMenu[i].y = (WINDOW_HEIGHT / 2) - (txtHeight / 2) - 200;
+            txtMenu[i].width = txtWidth;
+            txtMenu[i].height = txtHeight;
+        }
+        if (i == 1)
+        {
+            txtMenu[i].x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
+            txtMenu[i].y = txtMenu[i-1].y + (txtSeparation);
+            txtMenu[i].width = txtWidth;
+            txtMenu[i].height = txtHeight;
+        }
+        if (i == 2)
+        {
+            txtMenu[i].x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
+            txtMenu[i].y = txtMenu[i-1].y + (txtSeparation);
+            txtMenu[i].width = txtWidth;
+            txtMenu[i].height = txtHeight;
+        }
     }
-    textureStart = SDL_CreateTextureFromSurface(renderer, surfaceStart);
-    SDL_FreeSurface(surfaceStart);
 }
-
-void setupOptions(int WINDOW_WIDTH, int WINDOW_HEIGHT)
+void updateMenu(SDL_Renderer* renderer)
 {
-    txtOptions.x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
-    txtOptions.y = txtStart.y + (txtSeparation);
-    txtOptions.width = txtWidth;
-    txtOptions.height = txtHeight;
-}
-void updateOptions(SDL_Renderer* renderer)
-{
-    surfaceOptions = TTF_RenderText_Solid(font, "Options", { 255,255,255 });
-    if (!surfaceOptions)
+    for (int i = 0; i < cantTextos; i++)
     {
-        fprintf(stderr, "Options Surface error\n");
-        fprintf(stderr, IMG_GetError());
+        if (i == 0)
+        {
+            surfaceMenu[i] = TTF_RenderText_Solid(font, "Start", {255,255,255});
+            if (!surfaceMenu[i])
+            {
+                fprintf(stderr, "Menu Surface error\n");
+                fprintf(stderr, IMG_GetError());
+            }
+            textureMenu[i] = SDL_CreateTextureFromSurface(renderer, surfaceMenu[i]);
+            SDL_FreeSurface(surfaceMenu[i]);
+        }
+        if (i == 1)
+        {
+            surfaceMenu[i] = TTF_RenderText_Solid(font, "Options", { 255,255,255 });
+            if (!surfaceMenu[i])
+            {
+                fprintf(stderr, "Options Surface error\n");
+                fprintf(stderr, IMG_GetError());
+            }
+            textureMenu[i] = SDL_CreateTextureFromSurface(renderer, surfaceMenu[i]);
+            SDL_FreeSurface(surfaceMenu[i]);
+        }
+        if (i == 2)
+        {
+            surfaceMenu[i] = TTF_RenderText_Solid(font, "Quit", { 255,255,255 });
+            if (!surfaceMenu[i])
+            {
+                fprintf(stderr, "Quit Surface error\n");
+                fprintf(stderr, IMG_GetError());
+            }
+            textureMenu[i] = SDL_CreateTextureFromSurface(renderer, surfaceMenu[i]);
+            SDL_FreeSurface(surfaceMenu[i]);
+        }
     }
-    textureOptions = SDL_CreateTextureFromSurface(renderer, surfaceOptions);
-    SDL_FreeSurface(surfaceOptions);
 }
-
-void setupQuit(int WINDOW_WIDTH, int WINDOW_HEIGHT)
+void renderMenu(SDL_Renderer* renderer)
 {
-    txtQuit.x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
-    txtQuit.y = txtOptions.y + (txtSeparation);
-    txtQuit.width = txtWidth;
-    txtQuit.height = txtHeight;
-}
-void updateQuit(SDL_Renderer* renderer)
-{
-    surfaceQuit = TTF_RenderText_Solid(font, "Quit", { 255,255,255 });
-    if (!surfaceQuit)
+    vector<SDL_Rect> rectMenu(cantTextos);
+    for (int i = 0; i < cantTextos; i++)
     {
-        fprintf(stderr, "Menu Surface error\n");
-        fprintf(stderr, IMG_GetError());
+        rectMenu[i] = {
+        (int)txtMenu[i].x,  
+        (int)txtMenu[i].y,
+        (int)txtMenu[i].width,
+        (int)txtMenu[i].height
+        };
+        SDL_RenderCopy(renderer, textureMenu[i], nullptr, &rectMenu[i]);
     }
-    textureQuit = SDL_CreateTextureFromSurface(renderer, surfaceQuit);
-    SDL_FreeSurface(surfaceQuit);
 }
-
+void destroyTexturesMenu()
+{
+    for (size_t i = 0; i < cantTextos; i++)
+    {
+        SDL_DestroyTexture(textureMenu[i]);
+    }
+}
 
 //////////////////////////
 ///Inicializador Texturas
@@ -130,53 +168,6 @@ void destroyMusicSFX()
     Mix_FreeChunk(paddleRightSFX);
     Mix_FreeChunk(bordersSFX);
     Mix_FreeChunk(scoreSFX);
-}
-
-//////////////////////////
-// Menu
-//////////////////////////
-
-void setupPrincipalMenu(int WINDOW_WIDTH, int WINDOW_HEIGHT)
-{
-    setupStart(WINDOW_WIDTH, WINDOW_HEIGHT);
-    setupOptions(WINDOW_WIDTH, WINDOW_HEIGHT);
-    setupQuit(WINDOW_WIDTH, WINDOW_HEIGHT);
-}
-void updatePrincipalMenu(SDL_Renderer* renderer)
-{
-    updateStart(renderer);
-    updateOptions(renderer);
-    updateQuit(renderer);
-}
-void renderPrincipalMenu(SDL_Renderer* renderer)
-{
-    SDL_Rect rectStart = {
-        (int)txtStart.x,
-        (int)txtStart.y,
-        (int)txtStart.width,
-        (int)txtStart.height
-    };
-    SDL_Rect rectOptions = {
-        (int)txtOptions.x,
-        (int)txtOptions.y,
-        (int)txtOptions.width,
-        (int)txtOptions.height
-    };
-    SDL_Rect rectQuit = {
-        (int)txtQuit.x,
-        (int)txtQuit.y,
-        (int)txtQuit.width,
-        (int)txtQuit.height
-    };
-    SDL_RenderCopy(renderer, textureStart, nullptr, &rectStart);
-    SDL_RenderCopy(renderer, textureOptions, nullptr, &rectOptions);
-    SDL_RenderCopy(renderer, textureQuit, nullptr, &rectQuit);
-}
-void destroyTexturesPrincipalMenu()
-{
-    SDL_DestroyTexture(textureStart);
-    SDL_DestroyTexture(textureOptions);
-    SDL_DestroyTexture(textureQuit);
 }
 
 //////////////////////////

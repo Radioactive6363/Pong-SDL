@@ -4,6 +4,9 @@
 #include <SDL_ttf.h> 
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <vector>
+
+using namespace std;
 
 extern Mix_Music* music;
 extern Mix_Chunk* paddleLeftSFX;
@@ -19,9 +22,12 @@ struct texts
     int width;
     int height;
 };
-extern texts txtStart, txtOptions, txtQuit;
-extern SDL_Surface *surfaceStart, *surfaceOptions, *surfaceQuit;
-extern SDL_Texture *textureStart, *textureOptions, *textureQuit;
+extern vector<texts> txtMenu;
+extern vector<SDL_Surface*> surfaceMenu;
+extern vector<SDL_Texture*> textureMenu;
+//extern texts txtStart, txtOptions, txtQuit;
+//extern SDL_Surface *surfaceStart, *surfaceOptions, *surfaceQuit;
+//extern SDL_Texture *textureStart, *textureOptions, *textureQuit;
 
 
 
@@ -30,10 +36,10 @@ void initializeMusic();
 void initializeSFX();
 void destroyMusicSFX();
 
-void setupPrincipalMenu(int, int);
-void updatePrincipalMenu(SDL_Renderer*);
-void renderPrincipalMenu(SDL_Renderer*);
-void destroyTexturesPrincipalMenu();
+void setupMenu(int, int);
+void updateMenu(SDL_Renderer*);
+void renderMenu(SDL_Renderer*);
+void destroyTexturesMenu();
 
 void setupNormalGame(int, int);
 void updateNormalGame(SDL_Renderer*, int, int, float);
