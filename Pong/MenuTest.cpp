@@ -76,41 +76,29 @@ void setupMenu(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 }
 void updateMenu(SDL_Renderer* renderer)
 {
+    vector<string> stringTxtMenu(cantTextos);
     for (int i = 0; i < cantTextos; i++)
     {
         if (i == 0)
         {
-            surfaceMenu[i] = TTF_RenderText_Solid(font, "Start", {255,255,255});
-            if (!surfaceMenu[i])
-            {
-                fprintf(stderr, "Menu Surface error\n");
-                fprintf(stderr, IMG_GetError());
-            }
-            textureMenu[i] = SDL_CreateTextureFromSurface(renderer, surfaceMenu[i]);
-            SDL_FreeSurface(surfaceMenu[i]);
+            stringTxtMenu[i] = "Start";
         }
         if (i == 1)
         {
-            surfaceMenu[i] = TTF_RenderText_Solid(font, "Options", { 255,255,255 });
-            if (!surfaceMenu[i])
-            {
-                fprintf(stderr, "Options Surface error\n");
-                fprintf(stderr, IMG_GetError());
-            }
-            textureMenu[i] = SDL_CreateTextureFromSurface(renderer, surfaceMenu[i]);
-            SDL_FreeSurface(surfaceMenu[i]);
+            stringTxtMenu[i] = "Options";
         }
         if (i == 2)
         {
-            surfaceMenu[i] = TTF_RenderText_Solid(font, "Quit", { 255,255,255 });
-            if (!surfaceMenu[i])
-            {
-                fprintf(stderr, "Quit Surface error\n");
-                fprintf(stderr, IMG_GetError());
-            }
-            textureMenu[i] = SDL_CreateTextureFromSurface(renderer, surfaceMenu[i]);
-            SDL_FreeSurface(surfaceMenu[i]);
+            stringTxtMenu[i] = "Quit";
         }
+        surfaceMenu[i] = TTF_RenderText_Solid(font, stringTxtMenu[i].c_str(), {255,255,255});
+        if (!surfaceMenu[i])
+        {
+            fprintf(stderr, "String Txt error\n");
+            fprintf(stderr, IMG_GetError());
+        }
+        textureMenu[i] = SDL_CreateTextureFromSurface(renderer, surfaceMenu[i]);
+        SDL_FreeSurface(surfaceMenu[i]);
     }
 }
 void renderMenu(SDL_Renderer* renderer)
@@ -176,42 +164,29 @@ void destroyMusicSFX()
 
 void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
+    setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
+    setupPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paletas
     setupScoreLeft(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Izquierdo
     setupScoreRight(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje Derecho
     setupTimerGame(WINDOW_WIDTH, WINDOW_HEIGHT);
-    setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
-    setupLeftPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Izquierda
-    setupRightPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paleta Derecha
 }
 void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
 {
     ballMovement(delta_time); //Movimiento Pelota
     ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT); //Colisiones Pelota
-    collisionLeftPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
-    collisionRightPalette(WINDOW_HEIGHT); //Colisiones Paleta Izquierda
-    updateTimerGame(renderer);
+    collisionPalette(WINDOW_HEIGHT);
     updateScoreLeft(renderer); //Puntaje Izquierdo
     updateScoreRight(renderer); //Puntaje Derecho
+    updateTimerGame(renderer);
 }
 void renderNormalGame(SDL_Renderer* renderer)
 {
+    //vector<SDL_Rect> rectGameTextures(6);
     SDL_Rect rectBall = {
      (int)ballimg.x,
      (int)ballimg.y,
      (int)ballimg.width,
      (int)ballimg.height
-    };
-    SDL_Rect rectPaddle_Left = {
-        (int)paddleLeft.x,
-        (int)paddleLeft.y,
-        (int)paddleLeft.width,
-        (int)paddleLeft.height
-    };
-    SDL_Rect rectPaddle_Right = {
-        (int)paddleRight.x,
-        (int)paddleRight.y,
-        (int)paddleRight.width,
-        (int)paddleRight.height
     };
     SDL_Rect rectTimer_Game = {
         (int)timer.x,
@@ -232,8 +207,7 @@ void renderNormalGame(SDL_Renderer* renderer)
         (int)scoreRight.height,
     };
     SDL_RenderCopy(renderer, textureBall, nullptr, &rectBall);
-    SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Left);
-    SDL_RenderCopy(renderer, texturePaddle, nullptr, &rectPaddle_Right);
+    renderPalette(renderer);
     SDL_RenderCopy(renderer, textureTimerGame, nullptr, &rectTimer_Game);
     SDL_RenderCopy(renderer, textureScoreLeft, nullptr, &rectScore_Left);
     SDL_RenderCopy(renderer, textureScoreRight, nullptr, &rectScore_Right);
@@ -241,7 +215,7 @@ void renderNormalGame(SDL_Renderer* renderer)
 void destroyTexturesNormalGame()
 {
     SDL_DestroyTexture(textureBall);
-    SDL_DestroyTexture(texturePaddle);
-    SDL_DestroyTexture(textureScoreLeft);
+    destroyTexturePaddles();
     SDL_DestroyTexture(textureScoreRight);
+    SDL_DestroyTexture(textureScoreLeft);
 }

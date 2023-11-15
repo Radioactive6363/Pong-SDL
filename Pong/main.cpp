@@ -121,25 +121,24 @@ void process_input()
             }
         }
     }
-
     //Jugador Izq
     if (keyboardState[SDL_SCANCODE_W])
     {
-        paddleLeft.y -= paddleSpeed * delta_time;
+        paddle[0].y -= paddleSpeed * delta_time;
     }
     if (keyboardState[SDL_SCANCODE_S])
     {
-        paddleLeft.y += paddleSpeed * delta_time;
+        paddle[0].y += paddleSpeed * delta_time;
     }
 
     //Jugador Der
     if (keyboardState[SDL_SCANCODE_I])
     {
-        paddleRight.y -= paddleSpeed * delta_time;
+        paddle[1].y -= paddleSpeed * delta_time;
     }
     if (keyboardState[SDL_SCANCODE_K])
     {
-        paddleRight.y += paddleSpeed * delta_time;
+        paddle[1].y += paddleSpeed * delta_time;
     }
 }
 
