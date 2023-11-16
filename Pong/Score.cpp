@@ -9,7 +9,7 @@
 using namespace std;
 
 //Variables Modificables
-int cantScores = 2;
+int cantScores = 4;
 int cantTimers = 2;
 int scoreWidth = 100; //Alto de Score
 int scoreHeight = 150;//Ancho de Score
@@ -17,8 +17,8 @@ int scoreSeparation = 100;//Separacion respecto al centro
 vector <int> intScores = { 0,0 };
 Uint32 ticksTracker = 0; //Tracker en milisegundos. NO TOCAR
 bool endTimer = false;
-bool cooldownTimer = false;
-vector<int> timerGame = { 10 + (1), 3}; //Cantidad de segundos x partido. No cambiar (1)
+bool cooldownTimer = true;
+vector<int> timerGame = { 120 + (1), 3 + (1)}; //Cantidad de segundos x partido. No cambiar (1)
 int timerGameWidth = 150; //Alto de tiempo
 int timerGameHeight = 200;//Ancho de tiempo
 
@@ -49,11 +49,18 @@ void setupScores(int WINDOW_WIDTH, int WINDOW_HEIGHT)
             score[i].width = scoreWidth;
             score[i].height = scoreHeight;
         }
-        if (i == 1)
+        else if (i == 1)
         {
             //Score Der
             score[i].x = (WINDOW_WIDTH - (WINDOW_WIDTH / 2)) - (scoreWidth / 2) + scoreSeparation;
             score[i].y = WINDOW_HEIGHT / 8 - (scoreHeight / 2);
+            score[i].width = scoreWidth;
+            score[i].height = scoreHeight;
+        }
+        else
+        {
+            score[i].x = (WINDOW_WIDTH / 2) - (scoreWidth / 2);
+            score[i].y = (WINDOW_HEIGHT / 2) - (scoreHeight / 2);
             score[i].width = scoreWidth;
             score[i].height = scoreHeight;
         }
@@ -72,13 +79,18 @@ void updateScores(SDL_Renderer* renderer)
         {
             colorTxtScores[i] = { 255,0,0,255 };
         }
-        charScores[i] = stringScores[i].c_str();
-        stringScores[i] = to_string(intScores[i]);
-        surfaceScores[i] = TTF_RenderText_Solid(font, charScores[i], colorTxtScores[i]);
-        if (!surfaceScores[i])
+        if (i == 2 || i == 3)
         {
-            fprintf(stderr, "Surface score error\n");
-            fprintf(stderr, IMG_GetError());
+            stringScores[i] = "Jugador " + to_string(i-1);
+            charScores[i] = stringScores[i].c_str();
+            stringScores[i] = to_string(intScores[i]);
+            surfaceScores[i] = TTF_RenderText_Solid(font, charScores[i], colorTxtScores[i]);
+        }
+        else
+        {
+            charScores[i] = stringScores[i].c_str();
+            stringScores[i] = to_string(intScores[i]);
+            surfaceScores[i] = TTF_RenderText_Solid(font, charScores[i], colorTxtScores[i]);
         }
         textureScores[i] = SDL_CreateTextureFromSurface(renderer, surfaceScores[i]);
         SDL_FreeSurface(surfaceScores[i]);

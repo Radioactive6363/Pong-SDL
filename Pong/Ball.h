@@ -6,15 +6,13 @@
 using namespace std;
 
 extern SDL_Texture* textureBall;
-extern int ballWidth, 
-            ballHeight, 
-            ballRangeRandomInterval_X, 
-            ballRangeRandomInterval_Y,
-            initialSpeed_X,
-            initialSpeed_Y,
-            cantPelotas,
-            storageVelX,
-            storageVelY;
+extern int ballWidth,
+ballHeight,
+ballRangeRandomInterval_X,
+ballRangeRandomInterval_Y,
+initialSpeed_X,
+initialSpeed_Y,
+cantPelotas;
 
 struct ball
 {

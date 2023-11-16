@@ -13,7 +13,7 @@
 
 int cantPaddles = 2;
 int paddleWidth = 20; //Ancho de las Paletas
-int paddleHeight = paddleWidth * 8; //Altura de las paletas
+int paddleHeight = paddleWidth * 10; //Altura de las paletas
 int reachTolerance = 5; //Tasa de tolerancia.
 int paddleSpeed = 2000; //Velocidad de la paleta por seg (segun tiempo presionado).
 

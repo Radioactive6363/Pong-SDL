@@ -17,8 +17,6 @@ int ballInitialSpeed_X = 1000; //Velocidad pelota Inicial. Eje X
 int ballInitialSpeed_Y = 1000; //Velocidad pelota Inicial. Eje Y
 int ballRangeRandomInterval_X = 250 + ballInitialSpeed_X; //Intervalo de velocidad aleatoria. Cambiar unicamente los valores
 int ballRangeRandomInterval_Y = 250 + ballInitialSpeed_Y; //Intervalo de velocidad aleatoria. Cambiar unicamente los valores
-int storageVelX;
-int storageVelY;
 int cantPelotas = 1;
 SDL_Texture* textureBall;
 vector<ball> ballValues(cantPelotas);
