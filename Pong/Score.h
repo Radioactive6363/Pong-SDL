@@ -6,9 +6,12 @@
 
 using namespace std;
 
-extern int scoreWidth, scoreHeight, scoreSeparation;
+extern int scoreSeparation;
+extern vector <int> scoreWidth; //Alto de Score
+extern vector <int> scoreHeight;//Ancho de Score
 extern vector <int> timerGame;
 extern vector <int> intScores;
+extern vector <bool> playerWinner;
 
 extern Uint32 ticksTracker;
 extern bool endTimer;
@@ -29,7 +32,8 @@ extern vector<SDL_Texture*> textureScores, textureTimers;
 
 void setupScores(int, int);
 void updateScores(SDL_Renderer*);
-void renderScores(SDL_Renderer*);
+void winnerDeclarationScore(bool&);
+void renderScores(SDL_Renderer*, bool&);
 
 void setupTimers(int, int);
 void updateTimers(SDL_Renderer*);

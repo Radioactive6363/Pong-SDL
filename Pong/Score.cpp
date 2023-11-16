@@ -9,20 +9,23 @@
 using namespace std;
 
 //Variables Modificables
-int cantScores = 4;
-int cantTimers = 2;
-int scoreWidth = 100; //Alto de Score
-int scoreHeight = 150;//Ancho de Score
+int cantJugadores = 2; //Cantidad de Jugadores
+int cantTimers = 2; //Cantidad de Timers
+int cantScores = 2 + cantJugadores; //Cantidad de Scores
+int puntajeGanador = 3; //Puntaje para ganar
 int scoreSeparation = 100;//Separacion respecto al centro
-vector <int> intScores = { 0,0 };
 Uint32 ticksTracker = 0; //Tracker en milisegundos. NO TOCAR
-bool endTimer = false;
-bool cooldownTimer = true;
-vector<int> timerGame = { 120 + (1), 3 + (1)}; //Cantidad de segundos x partido. No cambiar (1)
+bool endTimer = false; //Finalizacion del Timer
+bool cooldownTimer = true; //Comienzo de Cooldown
 int timerGameWidth = 150; //Alto de tiempo
 int timerGameHeight = 200;//Ancho de tiempo
 
 //Almacenamiento de Strings
+vector <int> scoreWidth(cantScores);
+vector <int> scoreHeight(cantScores);
+vector <bool> playerWinner(cantScores / 2);
+vector <int> intScores = { 0,0 };
+vector<int> timerGame = { 120 + (1), 3 + (1) }; //Cantidad de segundos x partido. No cambiar (1)
 vector<SDL_Color> colorTxtScores(cantScores), colorTxtTimers(cantTimers);
 vector<string> stringScores (cantScores), stringTimers(cantTimers);
 vector<const char*> charScores (cantScores), charTimers(cantTimers);
@@ -41,28 +44,32 @@ void setupScores(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
     for (int i = 0; i < cantScores; i++)
     {
+        scoreWidth[i] = 100;
+        scoreHeight[i] = 200;
         if (i == 0) 
         {
             //Score Izq
-            score[i].x = WINDOW_WIDTH / 2 - (scoreWidth / 2) - scoreSeparation;
-            score[i].y = WINDOW_HEIGHT / 8 - (scoreHeight / 2);
-            score[i].width = scoreWidth;
-            score[i].height = scoreHeight;
+            score[i].x = WINDOW_WIDTH / 2 - (scoreWidth[i] / 2) - scoreSeparation;
+            score[i].y = WINDOW_HEIGHT / 8 - (scoreHeight[i] / 2);
+            score[i].width = scoreWidth[i];
+            score[i].height = scoreHeight[i];
         }
         else if (i == 1)
         {
             //Score Der
-            score[i].x = (WINDOW_WIDTH - (WINDOW_WIDTH / 2)) - (scoreWidth / 2) + scoreSeparation;
-            score[i].y = WINDOW_HEIGHT / 8 - (scoreHeight / 2);
-            score[i].width = scoreWidth;
-            score[i].height = scoreHeight;
+            score[i].x = (WINDOW_WIDTH - (WINDOW_WIDTH / 2)) - (scoreWidth[i] / 2) + scoreSeparation;
+            score[i].y = WINDOW_HEIGHT / 8 - (scoreHeight[i] / 2);
+            score[i].width = scoreWidth[i];
+            score[i].height = scoreHeight[i];
         }
         else
         {
-            score[i].x = (WINDOW_WIDTH / 2) - (scoreWidth / 2);
-            score[i].y = (WINDOW_HEIGHT / 2) - (scoreHeight / 2);
-            score[i].width = scoreWidth;
-            score[i].height = scoreHeight;
+            scoreWidth[i] = 1200;
+            scoreHeight[i] = 500;
+            score[i].x = (WINDOW_WIDTH / 2) - (scoreWidth[i] / 2);
+            score[i].y = (WINDOW_HEIGHT / 2) - (scoreHeight[i] / 2);
+            score[i].width = scoreWidth[i];
+            score[i].height = scoreHeight[i];
         }
     }
 }
@@ -75,15 +82,22 @@ void updateScores(SDL_Renderer* renderer)
         {
             colorTxtScores[i] = { 0,0,255,255 };
         }
-        if (i == 1)
+        else if (i == 1)
         {
             colorTxtScores[i] = { 255,0,0,255 };
         }
-        if (i == 2 || i == 3)
+        if ((i == 2 || i == 3))
         {
-            stringScores[i] = "Jugador " + to_string(i-1);
+            if (i == 2)
+            {
+                colorTxtScores[i] = { 0,0,255,255 };
+            }
+            if (i == 3)
+            {
+                colorTxtScores[i] = { 255,0,0,255 };
+            }
+            stringScores[i] = "Jugador " + to_string(i-1) + " Gana!";
             charScores[i] = stringScores[i].c_str();
-            stringScores[i] = to_string(intScores[i]);
             surfaceScores[i] = TTF_RenderText_Solid(font, charScores[i], colorTxtScores[i]);
         }
         else
@@ -96,7 +110,17 @@ void updateScores(SDL_Renderer* renderer)
         SDL_FreeSurface(surfaceScores[i]);
     }
 }
-void renderScores(SDL_Renderer* renderer)
+void winnerDeclarationScore(bool &winner)
+{
+    for (int i = 0; i < cantScores - cantJugadores; i++)
+    {
+        if (intScores[i] == puntajeGanador)
+        {
+            winner = true;
+        }
+    }
+}
+void renderScores(SDL_Renderer* renderer, bool &winner)
 {
     vector<SDL_Rect> rectScores(cantScores);
     for (int i = 0; i < cantScores; i++)
@@ -107,7 +131,14 @@ void renderScores(SDL_Renderer* renderer)
         (int)score[i].width,
         (int)score[i].height
         };
-        SDL_RenderCopy(renderer, textureScores[i], nullptr, &rectScores[i]);
+        if (i<(cantScores-cantJugadores))
+        {
+            SDL_RenderCopy(renderer, textureScores[i], nullptr, &rectScores[i]);
+        }
+        else if (winner && (intScores[i - cantJugadores] == puntajeGanador))
+        {
+            SDL_RenderCopy(renderer, textureScores[i], nullptr, &rectScores[i]);
+        }
     }
 }
 
@@ -196,11 +227,11 @@ void renderTimers(SDL_Renderer* renderer)
         (int)timer[i].width,
         (int)timer[i].height
         };
-        if (!endTimer)
+        if (!endTimer && i == 0)
         {
             SDL_RenderCopy(renderer, textureTimers[0], nullptr, &rectTimers[0]);
         }
-        if (cooldownTimer)
+        if (cooldownTimer && i == 1)
         {
             SDL_RenderCopy(renderer, textureTimers[1], nullptr, &rectTimers[1]);
         }

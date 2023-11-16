@@ -61,7 +61,7 @@ void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT, bool &startCooldown)
             ballValues[i].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
             ballValues[i].vel_x = -ballValues[i].vel_x;
             ballValues[i].vel_y = -ballValues[i].vel_y;
-            intScores[0]++;
+            intScores[1]++;
             startCooldown = true;
             Mix_PlayChannel(-1, scoreSFX, 0);
         }
@@ -71,7 +71,7 @@ void ballCollisions(int WINDOW_WIDTH, int WINDOW_HEIGHT, bool &startCooldown)
             ballValues[i].y = (WINDOW_HEIGHT / 2) - (ballHeight / 2);
             ballValues[i].vel_x = -ballValues[i].vel_x;
             ballValues[i].vel_y = -ballValues[i].vel_y;
-            intScores[1]++;
+            intScores[0]++;
             startCooldown = true;
             Mix_PlayChannel(-1, scoreSFX, 0);
         }

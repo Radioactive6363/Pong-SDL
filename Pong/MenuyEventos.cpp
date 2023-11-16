@@ -16,6 +16,7 @@ int txtWidth = 300; //Ancho de texto.
 int txtHeight = 300;//Alto de texto.
 int txtSeparation = 250; //Separacion de textos.
 int cantTextos = 3; //Cantidad de Textos Solicitados.
+bool winner = false;
 Mix_Music* music = NULL;
 Mix_Chunk* paddleLeftSFX = NULL;
 Mix_Chunk* paddleRightSFX = NULL;
@@ -163,26 +164,35 @@ void destroyMusicSFX()
 
 void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
-    setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
-    setupPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paletas
-    setupScores(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje
-    setupTimers(WINDOW_WIDTH, WINDOW_HEIGHT); //Timers
+        setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
+        setupPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paletas
+        setupScores(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje
+        setupTimers(WINDOW_WIDTH, WINDOW_HEIGHT); //Timers
 }
 void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
 {
-    ballMovement(WINDOW_WIDTH, WINDOW_HEIGHT, delta_time); //Movimiento Pelota
-    ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer); //Colisiones Pelota
-    collisionPalette(WINDOW_HEIGHT, cantPelotas);//Colisiones Paleta
-    updateScores(renderer); //Puntaje
-    updateTimers(renderer); //Update Timers
-    ballCooldownReset(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer);
+    if(!winner)
+        {
+        ballMovement(WINDOW_WIDTH, WINDOW_HEIGHT, delta_time); //Movimiento Pelota
+        ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer); //Colisiones Pelota
+        collisionPalette(WINDOW_HEIGHT, cantPelotas);//Colisiones Paleta
+        updateTimers(renderer); //Update Timers
+        ballCooldownReset(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer);
+    }
+        winnerDeclarationScore(winner);
+        updateScores(renderer); //Puntaje
+        
 }
 void renderNormalGame(SDL_Renderer* renderer)
 {
-    renderBall(renderer);
-    renderPalette(renderer);
-    renderScores(renderer);
-    renderTimers(renderer);
+    if (!winner)
+    {
+        renderBall(renderer);
+        renderPalette(renderer);
+        renderTimers(renderer);
+    }
+    renderScores(renderer, winner);
+ 
 }
 void destroyTexturesNormalGame()
 {

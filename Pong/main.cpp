@@ -31,7 +31,7 @@ int initialize_window()
         SDL_WINDOWPOS_CENTERED,
         WINDOW_WIDTH,
         WINDOW_HEIGHT,
-        SDL_WINDOW_FULLSCREEN
+        0
     ); //(const char *title, int x, int y, int w, int h, Uint32 flags)
 
 
