@@ -13,10 +13,10 @@ using namespace std;
 
 int ballWidth = 20; //Altura Pelota
 int ballHeight = 20; //Ancho Pelota
-int ballInitialSpeed_X = 1000; //Velocidad pelota Inicial. Eje X
-int ballInitialSpeed_Y = 1000; //Velocidad pelota Inicial. Eje Y
-int ballRangeRandomInterval_X = 250 + ballInitialSpeed_X; //Intervalo de velocidad aleatoria. Cambiar unicamente los valores
-int ballRangeRandomInterval_Y = 250 + ballInitialSpeed_Y; //Intervalo de velocidad aleatoria. Cambiar unicamente los valores
+int ballInitialSpeed_X;
+int ballInitialSpeed_Y;
+int ballRangeRandomInterval_X;
+int ballRangeRandomInterval_Y;
 int cantPelotas = 1;
 SDL_Texture* textureBall;
 vector<ball> ballValues(cantPelotas);
@@ -41,6 +41,10 @@ void textureInitialitationBall(SDL_Renderer* renderer)
 
 void setupBall(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
+    ballInitialSpeed_X = 1000; //Velocidad pelota Inicial. Eje X
+    ballInitialSpeed_Y = 1000; //Velocidad pelota Inicial. Eje Y
+    ballRangeRandomInterval_X = 250 + ballInitialSpeed_X; //Intervalo de velocidad aleatoria. Cambiar unicamente los valores
+    ballRangeRandomInterval_Y = 250 + ballInitialSpeed_Y; //Intervalo de velocidad aleatoria. Cambiar unicamente los valores
     for (size_t i = 0; i < cantPelotas; i++)
     {
         ballValues[i].x = (WINDOW_WIDTH / 2) - (ballWidth / 2);

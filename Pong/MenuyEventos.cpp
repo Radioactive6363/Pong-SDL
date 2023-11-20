@@ -5,6 +5,8 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <vector>
+#include <iostream>
+#include <fstream>
 #include "Ball.h"
 #include "Score.h"
 #include "Paletas.h"
@@ -16,13 +18,14 @@ int txtWidth = 300; //Ancho de texto.
 int txtHeight = 300;//Alto de texto.
 int txtSeparation = 250; //Separacion de textos.
 int cantTextos = 3; //Cantidad de Textos Solicitados.
-bool winner = false;
+bool winner;
 Mix_Music* music = NULL;
 Mix_Chunk* paddleLeftSFX = NULL;
 Mix_Chunk* paddleRightSFX = NULL;
 Mix_Chunk* bordersSFX = NULL;
 Mix_Chunk* scoreSFX = NULL;
 TTF_Font *font;
+vector<SDL_Color> txtColors(cantTextos);
 vector<texts> txtMenu(cantTextos);
 vector<SDL_Surface*> surfaceMenu(cantTextos);
 vector<SDL_Texture*> textureMenu(cantTextos);
@@ -155,15 +158,12 @@ void destroyMusicSFX()
 }
 
 //////////////////////////
-///Funciones Adicionales
-//////////////////////////
-
-//////////////////////////
 //Juego
 //////////////////////////
 
 void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
+        winner = false;
         setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
         setupPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paletas
         setupScores(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje
@@ -171,21 +171,21 @@ void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 }
 void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
 {
-    if(!winner)
-        {
+    while(!winner && !endTimer)
+    {
         ballMovement(WINDOW_WIDTH, WINDOW_HEIGHT, delta_time); //Movimiento Pelota
         ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer); //Colisiones Pelota
         collisionPalette(WINDOW_HEIGHT, cantPelotas);//Colisiones Paleta
         updateTimers(renderer); //Update Timers
         ballCooldownReset(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer);
     }
+        endingGame();
         winnerDeclarationScore(winner);
         updateScores(renderer); //Puntaje
-        
 }
 void renderNormalGame(SDL_Renderer* renderer)
 {
-    if (!winner)
+    while (!winner && !endTimer)
     {
         renderBall(renderer);
         renderPalette(renderer);
@@ -200,3 +200,31 @@ void destroyTexturesNormalGame()
     destroyTexturePaddles();
     destroyTextureScoresTimers();
 }
+
+
+//////////////////////////
+///Funciones Extra
+//////////////////////////
+
+void saveFile()
+{
+    fstream lastGameStats;
+    lastGameStats.open("LastGame.txt", ios::out);
+
+    vector<string> resultados;
+    resultados.push_back("Puntaje Jugador 1: " + to_string(intScores[0]));
+    resultados.push_back("Puntaje Jugador 2: " + to_string(intScores[1]));
+    resultados.push_back("Tiempo Restante: " + to_string(timerGame[0]));
+    for (int i = 0; i < resultados.size(); i++)
+    {
+        lastGameStats << resultados[i] << endl;
+    }
+}
+
+void reset(int WINDOW_WIDTH, int WINDOW_HEIGHT)
+{
+    winner = false;
+    saveFile();
+    setupNormalGame(WINDOW_WIDTH, WINDOW_HEIGHT);
+}
+

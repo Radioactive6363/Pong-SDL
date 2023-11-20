@@ -1,0 +1,3 @@
+Puntaje Jugador 1: 0
+Puntaje Jugador 2: 2
+Tiempo Restante: 0

@@ -117,7 +117,22 @@ void process_input()
             }
             if (inputEvent.key.keysym.sym == SDLK_SPACE)
             {
-                gameStart = true;
+                if (gameStart)
+                {
+                    gameStart = false;
+                }
+                else
+                {
+                    gameStart = true;
+                }
+            }
+            if (inputEvent.key.keysym.sym == SDLK_p)
+            {
+                if (winner)
+                {
+                    reset(WINDOW_WIDTH, WINDOW_HEIGHT);
+                    gameStart = false;
+                }
             }
         }
     }
@@ -151,7 +166,7 @@ void setup()
     initializeTextures(renderer);
     initializeMusic();
     initializeSFX();
-    Mix_PlayMusic(music, -1);
+    //Mix_PlayMusic(music, -1);
     setupMenu(WINDOW_WIDTH, WINDOW_HEIGHT);
     setupNormalGame(WINDOW_WIDTH, WINDOW_HEIGHT);
 }

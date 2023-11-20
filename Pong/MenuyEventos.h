@@ -7,6 +7,7 @@
 #include <vector>
 
 using namespace std;
+extern bool winner;
 
 extern Mix_Music* music;
 extern Mix_Chunk* paddleLeftSFX;
@@ -41,3 +42,5 @@ void setupNormalGame(int, int);
 void updateNormalGame(SDL_Renderer*, int, int, float);
 void renderNormalGame(SDL_Renderer*);
 void destroyTexturesNormalGame();
+
+void reset(int, int);
