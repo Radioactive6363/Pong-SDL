@@ -171,7 +171,7 @@ void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 }
 void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGHT, float delta_time)
 {
-    while(!winner && !endTimer)
+    if (!winner && !endTimer)
     {
         ballMovement(WINDOW_WIDTH, WINDOW_HEIGHT, delta_time); //Movimiento Pelota
         ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer); //Colisiones Pelota
@@ -185,7 +185,7 @@ void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGH
 }
 void renderNormalGame(SDL_Renderer* renderer)
 {
-    while (!winner && !endTimer)
+    if (!winner && !endTimer)
     {
         renderBall(renderer);
         renderPalette(renderer);
@@ -212,9 +212,9 @@ void saveFile()
     lastGameStats.open("LastGame.txt", ios::out);
 
     vector<string> resultados;
-    resultados.push_back("Puntaje Jugador 1: " + to_string(intScores[0]));
-    resultados.push_back("Puntaje Jugador 2: " + to_string(intScores[1]));
-    resultados.push_back("Tiempo Restante: " + to_string(timerGame[0]));
+    resultados.push_back("Puntaje Jugador 1: " + to_string(intScores[0]) + " Puntos");
+    resultados.push_back("Puntaje Jugador 2: " + to_string(intScores[1]) + " Puntos");
+    resultados.push_back("Tiempo Restante: " + to_string(timerGame[0]) + " Segundos");
     for (int i = 0; i < resultados.size(); i++)
     {
         lastGameStats << resultados[i] << endl;
@@ -227,4 +227,3 @@ void reset(int WINDOW_WIDTH, int WINDOW_HEIGHT)
     saveFile();
     setupNormalGame(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
-
