@@ -37,7 +37,7 @@ void renderScores(SDL_Renderer*, bool&);
 
 void setupTimers(int, int);
 void updateTimers(SDL_Renderer*);
-void endingGame();
+void endingGameTimer();
 void renderTimers(SDL_Renderer*);
 
 void destroyTextureScoresTimers();

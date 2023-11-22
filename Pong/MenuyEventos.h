@@ -8,6 +8,7 @@
 
 using namespace std;
 extern bool winner;
+extern bool botModeActive;
 
 extern Mix_Music* music;
 extern Mix_Chunk* paddleLeftSFX;

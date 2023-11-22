@@ -1,4 +1,7 @@
 #include "MenuyEventos.h"
+#include "Ball.h"
+#include "Score.h"
+#include "Paletas.h"
 #include <string>
 #include <stdio.h>
 #include <SDL_ttf.h> 
@@ -7,18 +10,16 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include "Ball.h"
-#include "Score.h"
-#include "Paletas.h"
 
 using namespace std;
 
 //Variables Modificables
-int txtWidth = 300; //Ancho de texto.
+int txtWidth = 700; //Ancho de texto.
 int txtHeight = 300;//Alto de texto.
 int txtSeparation = 250; //Separacion de textos.
 int cantTextos = 3; //Cantidad de Textos Solicitados.
 bool winner;
+bool botModeActive = false;
 Mix_Music* music = NULL;
 Mix_Chunk* paddleLeftSFX = NULL;
 Mix_Chunk* paddleRightSFX = NULL;
@@ -52,24 +53,17 @@ void setupMenu(int WINDOW_WIDTH, int WINDOW_HEIGHT)
     {
         if (i == 0)
         {
-            txtMenu[i].x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
+            txtMenu[i].width = txtWidth;
+            txtMenu[i].height = txtHeight;
+            txtMenu[i].x = (WINDOW_WIDTH / 2) - (txtMenu[i].width / 2);
             txtMenu[i].y = (WINDOW_HEIGHT / 2) - (txtHeight / 2) - 200;
-            txtMenu[i].width = txtWidth;
-            txtMenu[i].height = txtHeight;
         }
-        if (i == 1)
+        else
         {
-            txtMenu[i].x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
-            txtMenu[i].y = txtMenu[i-1].y + (txtSeparation);
-            txtMenu[i].width = txtWidth;
+            txtMenu[i].width = txtWidth + 200;
             txtMenu[i].height = txtHeight;
-        }
-        if (i == 2)
-        {
-            txtMenu[i].x = (WINDOW_WIDTH / 2) - (txtWidth / 2);
-            txtMenu[i].y = txtMenu[i-1].y + (txtSeparation);
-            txtMenu[i].width = txtWidth;
-            txtMenu[i].height = txtHeight;
+            txtMenu[i].x = (WINDOW_WIDTH / 2) - (txtMenu[i].width / 2);
+            txtMenu[i].y = txtMenu[i - 1].y + (txtSeparation);
         }
     }
 }
@@ -78,19 +72,30 @@ void updateMenu(SDL_Renderer* renderer)
     vector<string> stringTxtMenu(cantTextos);
     for (int i = 0; i < cantTextos; i++)
     {
+        txtColors[i] = { 255,255,255,255 };
         if (i == 0)
         {
-            stringTxtMenu[i] = "Start";
+            stringTxtMenu[i] = "Press SPACE to Start";
         }
         if (i == 1)
         {
-            stringTxtMenu[i] = "Options";
+            
+            if (botModeActive == true)
+            {
+                txtColors[i] = { 0,255,0,255 };
+            }
+            else
+            {
+                txtColors[i] = { 255,0,0,255 };
+            }
+            stringTxtMenu[i] = "Botmode Active";
         }
         if (i == 2)
         {
-            stringTxtMenu[i] = "Quit";
+            txtColors[i] = { 0,0,200,255/3 };
+            stringTxtMenu[i] = "Change Mode: E";
         }
-        surfaceMenu[i] = TTF_RenderText_Solid(font, stringTxtMenu[i].c_str(), {255,255,255});
+        surfaceMenu[i] = TTF_RenderText_Solid(font, stringTxtMenu[i].c_str(), txtColors[i]);
         if (!surfaceMenu[i])
         {
             fprintf(stderr, "String Txt error\n");
@@ -164,6 +169,7 @@ void destroyMusicSFX()
 void setupNormalGame(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
         winner = false;
+        Mix_PlayMusic(music, -1);
         setupBall(WINDOW_WIDTH, WINDOW_HEIGHT); //Pelota
         setupPalette(WINDOW_WIDTH, WINDOW_HEIGHT); //Paletas
         setupScores(WINDOW_WIDTH, WINDOW_HEIGHT); //Puntaje
@@ -173,13 +179,19 @@ void updateNormalGame(SDL_Renderer* renderer, int WINDOW_WIDTH, int WINDOW_HEIGH
 {
     if (!winner && !endTimer)
     {
+        srand(time(NULL));
         ballMovement(WINDOW_WIDTH, WINDOW_HEIGHT, delta_time); //Movimiento Pelota
         ballCollisions(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer); //Colisiones Pelota
+        botModePalette(ballValues[0].y, ballValues[0].height, delta_time);
         collisionPalette(WINDOW_HEIGHT, cantPelotas);//Colisiones Paleta
         updateTimers(renderer); //Update Timers
         ballCooldownReset(WINDOW_WIDTH, WINDOW_HEIGHT, cooldownTimer);
     }
-        endingGame();
+    else
+    {
+        Mix_HaltMusic();
+    }
+        endingGameTimer();
         winnerDeclarationScore(winner);
         updateScores(renderer); //Puntaje
 }

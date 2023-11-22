@@ -5,12 +5,16 @@
 #include <time.h> //Time
 #include <stdlib.h> //Rand
 #include <stdio.h> //printf,NULL
+#include <cmath> //Math
 #include <vector> //Vector
 
 /////////////
 ///Variables
 /////////////
 
+Uint32 ticksTrackerBotMode = 0;
+bool difficultyBalance = true;
+int ballPosTrackerY;
 int cantPaddles = 2;
 int paddleWidth = 20; //Ancho de las Paletas
 int paddleHeight = paddleWidth * 10; //Altura de las paletas
@@ -63,6 +67,55 @@ void setupPalette(int WINDOW_WIDTH,int WINDOW_HEIGHT)
         }
     }
 }
+void botModePalette(int ballPosY, int ballHeight, float factor)
+{
+    ballPosTrackerY = (ballPosY + (ballHeight / 2));
+    int posDifference;
+
+    if (botModeActive)
+    {
+        if (difficultyBalance)
+        {
+            if ((paddle[1].y + (paddleHeight / 2)) >= ballPosTrackerY)
+            {
+                posDifference = -(ballPosTrackerY - (paddle[1].y + (paddleHeight / 2)));
+                paddle[1].y -= posDifference * (factor * 10);
+            }
+            else
+            {
+                posDifference = ballPosTrackerY - (paddle[1].y + (paddleHeight / 2));
+                paddle[1].y += posDifference * (factor * 10);
+            }
+        }
+        else
+        {
+            if ((paddle[1].y + (paddleHeight / 2)) >= ballPosTrackerY)
+            {
+                posDifference = -(ballPosTrackerY - (paddle[1].y + (paddleHeight / 2)));
+                paddle[1].y -= posDifference * (factor * 12);
+            }
+            else
+            {
+                posDifference = ballPosTrackerY - (paddle[1].y + (paddleHeight / 2));
+                paddle[1].y += posDifference * (factor * 12);
+            }
+        }
+
+        while (ticksTrackerBotMode <= SDL_GetTicks())
+        {
+            ticksTrackerBotMode = SDL_GetTicks() + 10000.0f;
+            if (difficultyBalance)
+            {
+                difficultyBalance = false;
+            }
+            else
+            {
+                difficultyBalance = true;
+            }
+            
+        }
+    }
+}
 void collisionPalette(int WINDOW_HEIGHT, int cantPelotas)
 {
     for (int i = 0; i < cantPaddles; i++)
@@ -77,18 +130,20 @@ void collisionPalette(int WINDOW_HEIGHT, int cantPelotas)
                     if (((ballValues[j].y + reachTolerance) <= (paddle[i].y + paddleHeight)) && (ballValues[j].y + ballHeight - reachTolerance) >= paddle[i].y)
                     {
                         ballValues[j].x = (paddle[i].x + ballValues[j].width);
-                        ballValues[j].vel_x = 1000;
-                        ballValues[j].vel_x = (rand() % (ballRangeRandomInterval_X - ballValues[j].vel_x + 1) + ballValues[j].vel_x);
                         switch(rand() % 2 + 1)
                         {
                             case 1:
                             {
+                                ballValues[j].vel_x = 1000;
+                                ballValues[j].vel_x = (rand() % (ballRangeRandomInterval_X - ballValues[j].vel_x + 1) + ballValues[j].vel_x);
                                 ballValues[j].vel_y = 1000;
                                 ballValues[j].vel_y = rand() % (ballRangeRandomInterval_Y - ballValues[j].vel_y + 1) + ballValues[j].vel_y;
                                 break;
                             }
                             case 2:
                             {
+                                ballValues[j].vel_x = 1000;
+                                ballValues[j].vel_x = (rand() % (ballRangeRandomInterval_X - ballValues[j].vel_x + 1) + ballValues[j].vel_x);
                                 ballValues[j].vel_y = 1000;
                                 ballValues[j].vel_y = -(rand() % (ballRangeRandomInterval_Y - ballValues[j].vel_y + 1) + ballValues[j].vel_y);
                                 break;
@@ -114,18 +169,20 @@ void collisionPalette(int WINDOW_HEIGHT, int cantPelotas)
                     if (((ballValues[j].y + ballHeight - reachTolerance) >= paddle[i].y && (ballValues[j].y + reachTolerance) <= (paddle[i].y + paddleHeight)))
                     {
                         ballValues[j].x = (paddle[i].x - ballValues[j].width);
-                        ballValues[j].vel_x = 1000;
-                        ballValues[j].vel_x = -(rand() % (ballRangeRandomInterval_X - ballValues[j].vel_x + 1) + ballValues[j].vel_x);
                         switch (rand() % 2 + 1)
                         {
                             case 1:
                             {
+                                ballValues[j].vel_x = 1000;
+                                ballValues[j].vel_x = -(rand() % (ballRangeRandomInterval_X - ballValues[j].vel_x + 1) + ballValues[j].vel_x);
                                 ballValues[j].vel_y = 1000;
                                 ballValues[j].vel_y = rand() % (ballRangeRandomInterval_Y - ballValues[j].vel_y + 1) + ballValues[j].vel_y;
                                 break;
                             }
                             case 2:
                             {
+                                ballValues[j].vel_x = 1000;
+                                ballValues[j].vel_x = -(rand() % (ballRangeRandomInterval_X - ballValues[j].vel_x + 1) + ballValues[j].vel_x);
                                 ballValues[j].vel_y = 1000;
                                 ballValues[j].vel_y = -(rand() % (ballRangeRandomInterval_Y - ballValues[j].vel_y + 1) + ballValues[j].vel_y);
                                 break;

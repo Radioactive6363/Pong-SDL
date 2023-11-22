@@ -138,19 +138,18 @@ void renderScores(SDL_Renderer* renderer, bool &winner)
         (int)score[i].width,
         (int)score[i].height
         };
+
         if (i<(cantScores-cantJugadores))
         {
             SDL_RenderCopy(renderer, textureScores[i], nullptr, &rectScores[i]);
         }
-        else
+        else if (winner && (intScores[0] == puntajeGanador))
         {
-            for (int j = 0; j < cantJugadores-1; j++)
-            {
-                if (winner && (intScores[j] == puntajeGanador))
-                {
-                    SDL_RenderCopy(renderer, textureScores[j], nullptr, &rectScores[j]);
-                }     
-            } 
+            SDL_RenderCopy(renderer, textureScores[2], nullptr, &rectScores[2]);
+        }
+        else if (winner && (intScores[1] == puntajeGanador))
+        {
+            SDL_RenderCopy(renderer, textureScores[3], nullptr, &rectScores[3]);
         }
 
         if (endTimer)
@@ -179,7 +178,7 @@ void setupTimers(int WINDOW_WIDTH, int WINDOW_HEIGHT)
 {
     endTimer = false; //Finalizacion del Timer
     cooldownTimer = true; //Comienzo de Cooldown
-    timerGame = { 10 + (1), 3 + (1) }; //Cantidad de segundos x partido. No cambiar (1)
+    timerGame = { 120 + (1), 3 + (1) }; //Cantidad de segundos x partido. No cambiar (1)
     for (int i = 0; i < cantTimers; i++)
     {
          //Timer
@@ -251,7 +250,7 @@ void updateTimers(SDL_Renderer* renderer)
         }
     }
 }
-void endingGame()
+void endingGameTimer()
 {
     if (endTimer)
     {

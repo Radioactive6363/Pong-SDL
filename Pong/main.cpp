@@ -128,10 +128,21 @@ void process_input()
             }
             if (inputEvent.key.keysym.sym == SDLK_p)
             {
-                if (winner)
+                if (winner || gameStart)
                 {
                     reset(WINDOW_WIDTH, WINDOW_HEIGHT);
                     gameStart = false;
+                }
+            }
+            if (inputEvent.key.keysym.sym == SDLK_e)
+            {
+                if (botModeActive && !gameStart)
+                {
+                    botModeActive = false;
+                }
+                else if (!botModeActive && !gameStart)
+                {
+                    botModeActive = true;
                 }
             }
         }
@@ -146,15 +157,19 @@ void process_input()
         paddle[0].y += paddleSpeed * delta_time;
     }
 
-    //Jugador Der
-    if (keyboardState[SDL_SCANCODE_I])
+    //Jugador Der + botMode
+    if (botModeActive == false)
     {
-        paddle[1].y -= paddleSpeed * delta_time;
+        if (keyboardState[SDL_SCANCODE_I])
+        {
+            paddle[1].y -= paddleSpeed * delta_time;
+        }
+        if (keyboardState[SDL_SCANCODE_K])
+        {
+            paddle[1].y += paddleSpeed * delta_time;
+        }
     }
-    if (keyboardState[SDL_SCANCODE_K])
-    {
-        paddle[1].y += paddleSpeed * delta_time;
-    }
+    
 }
 
 void setup()
@@ -166,7 +181,6 @@ void setup()
     initializeTextures(renderer);
     initializeMusic();
     initializeSFX();
-    //Mix_PlayMusic(music, -1);
     setupMenu(WINDOW_WIDTH, WINDOW_HEIGHT);
     setupNormalGame(WINDOW_WIDTH, WINDOW_HEIGHT);
 }
@@ -244,7 +258,6 @@ void destroy_window()
 
 int main(int argc, char* argv[])
 {
-    srand(time(NULL));
     game_is_running = initialize_SDL() & initialize_window() & initialize_renderer() & initialize_SDLImg() & initialize_SDLTtf() & initialize_SDLMixer();
 
     setup();
