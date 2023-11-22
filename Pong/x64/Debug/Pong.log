@@ -1,4 +1,3 @@
-﻿  main.cpp
-C:\Users\tomas\OneDrive\Documentos\GitHub\Pong-SDL\Pong\main.cpp(170,19): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
-C:\Users\tomas\OneDrive\Documentos\GitHub\Pong-SDL\Pong\main.cpp(251,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Pong.vcxproj -> C:\Users\tomas\OneDrive\Documentos\GitHub\Pong-SDL\x64\Debug\Pong.exe
+﻿  Score.cpp
+C:\Users\tomas\Documents\GitHub\Pong-SDL\Pong\Score.cpp(232,43): warning C4244: '=': conversion from 'float' to 'Uint32', possible loss of data
+  Pong.vcxproj -> C:\Users\tomas\Documents\GitHub\Pong-SDL\x64\Debug\Pong.exe

@@ -13,7 +13,7 @@
 /////////////
 
 Uint32 ticksTrackerBotMode = 0;
-bool difficultyBalance = true;
+bool difficultyBalance = false;
 int ballPosTrackerY;
 int cantPaddles = 2;
 int paddleWidth = 20; //Ancho de las Paletas

@@ -140,7 +140,6 @@ void ballCooldownReset(int WINDOW_WIDTH, int WINDOW_HEIGHT,bool &startCooldown)
         }
     }
 }
-
 void renderBall(SDL_Renderer* renderer)
 {
     vector <SDL_Rect> rectBall(cantPelotas);

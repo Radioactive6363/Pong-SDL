@@ -88,7 +88,7 @@ void updateMenu(SDL_Renderer* renderer)
             {
                 txtColors[i] = { 255,0,0,255 };
             }
-            stringTxtMenu[i] = "Botmode Active";
+            stringTxtMenu[i] = "Bot mode Active";
         }
         if (i == 2)
         {
